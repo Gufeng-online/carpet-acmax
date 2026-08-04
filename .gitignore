@@ -40,11 +40,13 @@ replay_*.log
 *.jfr
 
 
-# 编译输出与临时目录（本地产物，不入库）
-com/
-net/
-_tmp_litematica/
+# Local build output & temp dirs (NOT committed).
+# NOTE: must anchor to repo root with leading slash, otherwise they will
+# wrongly match source dirs like src/main/java/com
+/com/
+/net/
+/_tmp_litematica/
 
-# 根目录废弃的 mixin 配置副本（真正生效的在 src/main/resources 下）
+# Stale root-level config copies (the real ones live under src/main/resources)
 /carpet-acmax.mixins.json
 /fabric.mod.json
