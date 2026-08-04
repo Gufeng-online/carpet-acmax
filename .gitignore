@@ -1,0 +1,50 @@
+# gradle
+
+.gradle/
+build/
+out/
+classes/
+
+# eclipse
+
+*.launch
+
+# idea
+
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# vscode
+
+.settings/
+.vscode/
+bin/
+.classpath
+.project
+
+# macos
+
+*.DS_Store
+
+# fabric
+
+run/
+
+# java
+
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr
+
+
+# 编译输出与临时目录（本地产物，不入库）
+com/
+net/
+_tmp_litematica/
+
+# 根目录废弃的 mixin 配置副本（真正生效的在 src/main/resources 下）
+/carpet-acmax.mixins.json
+/fabric.mod.json

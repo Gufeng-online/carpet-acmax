@@ -1,0 +1,13 @@
+{
+    "carpet.rule.endGatewayCooldown.name": "End Gateway Cooldown",
+    "carpet.rule.endGatewayCooldown.desc": "Disables the 2-second cooldown between end gateway teleports. Enable to allow unlimited teleportation without cooldown.",
+    "carpet.rule.itemEntityAlarm.name": "Item Entity Alarm",
+    "carpet.rule.itemEntityAlarm.desc": "When enabled, alerts all players in chat when a single chunk has 2000 or more item entities, including coordinates and count.",
+    "carpet.rule.railForceStatePlacement.name": "Rail Force State Placement",
+    "carpet.rule.railForceStatePlacement.desc": "When enabled, Easy Place forces the rail shape from schematic projection, ignoring support conditions. Easy-placed rails permanently retain their shape and are unaffected by any subsequent block placements (rail or non-rail). When a rail is broken, the mark is cleared and manual placement resumes normal behavior.",
+    "carpet.rule.disableRailShapeUpdate.name": "Disable Rail Shape Update",
+    "carpet.rule.disableRailShapeUpdate.desc": "When enabled, all rails (normal, powered, detector) will not change their shape/direction due to neighbor block changes. Power, redstone signal, and other normal functions remain unaffected.",
+    "carpet.rule.cactusWrenchRailEnhancement.name": "Cactus Wrench Rail Enhancement",
+    "carpet.rule.cactusWrenchRailEnhancement.desc": "When enabled with flippinCactus, right-clicking rails with cactus cycles through all valid shapes without triggering block or neighbor updates.",
+    "carpet.category.ACMAX": "ACMAX Settings"
+}

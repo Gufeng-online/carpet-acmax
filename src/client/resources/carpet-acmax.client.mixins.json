@@ -1,0 +1,15 @@
+{
+	"required": false,
+	"package": "com.gufeng.client.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+		"ExampleClientMixin",
+		"protocol.LitematicaWorldUtilsMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

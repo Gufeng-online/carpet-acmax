@@ -1,0 +1,21 @@
+{
+	"required": true,
+	"package": "com.gufeng.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"TheEndGatewayBlockEntityMixin",
+		"ItemEntityAlarmMixin",
+		"protocol.RailBlockProtocolMixin",
+		"protocol.BaseRailBlockNeighborMixin",
+		"protocol.BlockItemCanPlaceMixin",
+		"protocol.BaseRailBlockCanSurviveMixin",
+		"cactus.CactusWrenchRailMixin",
+		"protocol.BlockItemPlaceMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
