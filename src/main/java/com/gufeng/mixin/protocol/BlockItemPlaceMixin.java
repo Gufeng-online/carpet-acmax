@@ -1,5 +1,6 @@
 package com.gufeng.mixin.protocol;
 
+import com.gufeng.CarpetACMAX;
 import com.gufeng.protocol.EasyPlaceContext;
 import com.gufeng.protocol.ProtocolHelper;
 import com.gufeng.settings.ACMAXSettings;
@@ -20,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * - 放置结束（RETURN）→ EasyPlaceContext.endPlacement(该格)
  *
  * 保护严格限定在本次放置事务内，事务结束立即失效（周围一更新即恢复）。
+ * 标记带超时兜底，异常路径也不会残留。
  */
 @Mixin(BlockItem.class)
 public class BlockItemPlaceMixin {
@@ -31,6 +33,7 @@ public class BlockItemPlaceMixin {
         Vec3 hitPos = context.getClickLocation();
         BlockPos blockPos = context.getClickedPos();
         if (ProtocolHelper.hasProtocolValue(hitPos, blockPos)) {
+            CarpetACMAX.LOGGER.info("[ACMAX] easy-place begin at {}", blockPos);
             EasyPlaceContext.beginPlacement(context.getLevel(), blockPos);
         }
     }
