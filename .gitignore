@@ -50,3 +50,4 @@ replay_*.log
 # Stale root-level config copies (the real ones live under src/main/resources)
 /carpet-acmax.mixins.json
 /fabric.mod.json
+/_disabled_client_mixin/

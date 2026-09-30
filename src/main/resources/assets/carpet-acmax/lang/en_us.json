@@ -2,12 +2,12 @@
     "carpet.rule.endGatewayCooldown.name": "End Gateway Cooldown",
     "carpet.rule.endGatewayCooldown.desc": "Disables the 2-second cooldown between end gateway teleports. Enable to allow unlimited teleportation without cooldown.",
     "carpet.rule.itemEntityAlarm.name": "Item Entity Alarm",
-    "carpet.rule.itemEntityAlarm.desc": "When enabled, alerts all players in chat when a single chunk has 2000 or more item entities, including coordinates and count.",
+    "carpet.rule.itemEntityAlarm.desc": "When the number of item stacks in a single chunk reaches the configured threshold, alerts all players in chat with coordinates and count. The threshold can be set to 1000 / 2000 / 4000 / 6000, or any custom positive integer; set to 0 to disable the alarm.",
     "carpet.rule.railForceStatePlacement.name": "Rail Force State Placement",
-    "carpet.rule.railForceStatePlacement.desc": "When enabled, Easy Place forces the rail shape from schematic projection, ignoring support conditions. Easy-placed rails permanently retain their shape and are unaffected by any subsequent block placements (rail or non-rail). When a rail is broken, the mark is cleared and manual placement resumes normal behavior.",
-    "carpet.rule.disableRailShapeUpdate.name": "Disable Rail Shape Update",
-    "carpet.rule.disableRailShapeUpdate.desc": "When enabled, all rails (normal, powered, detector) will not change their shape/direction due to neighbor block changes. Power, redstone signal, and other normal functions remain unaffected.",
+    "carpet.rule.railForceStatePlacement.desc": "Only affects rails placed with Easy Place (Litematica, protocol V3): the rail is placed with the schematic shape, unsupported/floating rails can be placed, and the placement does not reshape surrounding rails. After the placement transaction ends, all rails behave normally again (redstone shape changes, unsupported rails falling, etc. are unaffected).",
     "carpet.rule.cactusWrenchRailEnhancement.name": "Cactus Wrench Rail Enhancement",
     "carpet.rule.cactusWrenchRailEnhancement.desc": "When enabled with flippinCactus, right-clicking rails with cactus cycles through all valid shapes without triggering block or neighbor updates.",
+    "carpet.rule.trialSpawnerIntervalFix.name": "Trial Spawner Interval Fix",
+    "carpet.rule.trialSpawnerIntervalFix.desc": "When enabled, trial spawners in the chamber_8 and encounter_4 structures of trial chambers use the normal 20gt (1 second) spawn interval instead of 160gt (8 seconds).",
     "carpet.category.ACMAX": "ACMAX Settings"
 }

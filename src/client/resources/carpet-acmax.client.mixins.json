@@ -3,8 +3,7 @@
 	"package": "com.gufeng.client.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"client": [
-		"ExampleClientMixin",
-		"protocol.LitematicaWorldUtilsMixin"
+		"ExampleClientMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

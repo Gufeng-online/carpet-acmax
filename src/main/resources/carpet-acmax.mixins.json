@@ -5,12 +5,14 @@
 	"mixins": [
 		"TheEndGatewayBlockEntityMixin",
 		"ItemEntityAlarmMixin",
+		"TrialSpawnerConfigMixin",
 		"protocol.RailBlockProtocolMixin",
 		"protocol.BaseRailBlockNeighborMixin",
 		"protocol.BlockItemCanPlaceMixin",
 		"protocol.BaseRailBlockCanSurviveMixin",
 		"cactus.CactusWrenchRailMixin",
-		"protocol.BlockItemPlaceMixin"
+		"protocol.BlockItemPlaceMixin",
+		"protocol.RailStateMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
