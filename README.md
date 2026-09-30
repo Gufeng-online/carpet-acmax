@@ -1,5 +1,7 @@
 # Carpet-ACMAX
 
+**简体中文** | [English](README.en.md)
+
 ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩展。
 **纯服务端规则**：只装在服务端即可生效，客户端可以不装（除特别标注的规则外）。
 
