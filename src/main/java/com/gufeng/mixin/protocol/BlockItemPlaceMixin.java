@@ -1,6 +1,5 @@
 package com.gufeng.mixin.protocol;
 
-import com.gufeng.CarpetACMAX;
 import com.gufeng.protocol.EasyPlaceContext;
 import com.gufeng.protocol.ProtocolHelper;
 import com.gufeng.settings.ACMAXSettings;
@@ -33,7 +32,6 @@ public class BlockItemPlaceMixin {
         Vec3 hitPos = context.getClickLocation();
         BlockPos blockPos = context.getClickedPos();
         if (ProtocolHelper.hasProtocolValue(hitPos, blockPos)) {
-            CarpetACMAX.LOGGER.info("[ACMAX] easy-place begin at {}", blockPos);
             EasyPlaceContext.beginPlacement(context.getLevel(), blockPos);
         }
     }
