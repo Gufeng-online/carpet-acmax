@@ -1,6 +1,5 @@
 package com.gufeng.mixin.protocol;
 
-import com.gufeng.CarpetACMAX;
 import com.gufeng.protocol.EasyPlaceContext;
 import com.gufeng.settings.ACMAXSettings;
 import net.minecraft.core.BlockPos;
@@ -38,7 +37,6 @@ public class BaseRailBlockNeighborMixin {
 
         if (EasyPlaceContext.isTransactionActive(level)) {
             if (!level.isClientSide()) {
-                CarpetACMAX.LOGGER.info("[ACMAX] freeze updateDir at {} during easy-place transaction", pos);
                 cir.setReturnValue(state);
                 cir.cancel();
             }
