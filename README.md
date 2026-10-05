@@ -12,7 +12,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 | `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.6 |
 | `26.1.2` | 26.1.2 | 0.155.2+26.1.2 | 26.1 | v1.2 |
 
-两个分支均提供以下五项规则；`main` 分支另提供下文的假人虚空交易功能。
+两个分支均提供原有五项规则；假人虚空交易的两项规则仅适用于 `main` 分支。
 
 ## 规则列表
 
@@ -25,38 +25,10 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 | `railForceStatePlacement` | `false` | 铁轨强制状态放置：只对「轻松放置」（Litematica 协议 V3）放置的铁轨生效。铁轨按投影形状放置（含悬空、无支撑的铁轨），且本次放置不会让周围铁轨变形。事务结束后立即恢复原版行为，红石换向、无支撑掉落等特性完全不受影响。 |
 | `cactusWrenchRailEnhancement` | `false` | 仙人掌扳手铁轨增强（需同时开启 `flippinCactus`）：手持仙人掌右键铁轨可依次切换所有形态，且不触发方块 / 邻居更新。 |
 | `trialSpawnerIntervalFix` | `false` | 修复试炼刷怪笼生成间隔：把试炼密室 `chamber_8`、`encounter_4` 结构中 160gt（8 秒）的生成间隔修正为正常的 20gt（1 秒）。 |
-
-## 构建
-
-需要 **JDK 25**（Minecraft 26.x 要求）。
-
-```bash
-./gradlew build
-```
-
-产物：`build/libs/carpet-acmax-addition-v1.5.6.jar`（放进服务端 `mods/` 即可，客户端无需安装）。
-
-## 运行依赖
-
-- Minecraft 26.2（`main` 分支）或 26.1.2（`26.1.2` 分支）
-- Fabric Loader ≥ 0.19.3（`main` 分支），26.1.2 分支沿用原依赖
-- [Fabric API](https://modrinth.com/mod/fabric-api)
-- [Carpet](https://modrinth.com/mod/carpet)
-
-## License
-
-MIT
-
-## 附加功能：假人虚空交易
-
-适用于 `main` 分支的 Minecraft 26.2。需要可正常运行的虚空交易装置，假人负责交易、收纳产物和点击返程陷阱箱。
-
-### 开关与权限
-
-| 规则 | 默认值 | 功能 |
-| --- | --- | --- |
 | `fakePlayerVoidTrading` | `false` | 开启假人虚空交易；关闭后停止正在运行的交易任务。 |
 | `fakePlayerVoidTradingAllowNonOp` | `false` | 开启后所有玩家可使用全部 `/voidtrade` 指令；关闭时仅 OP（权限等级至少 2）可用。 |
+
+### 虚空交易用法
 
 ```mcfunction
 /carpet fakePlayerVoidTrading true
@@ -72,7 +44,7 @@ MIT
 
 修改 Carpet 规则仍需要相应管理权限。交易总开关关闭时，`status` 和 `stop` 仍可使用，并遵守指令权限规则。
 
-### 准备装置和假人
+#### 准备装置和假人
 
 需要可正常运行的虚空交易装置：假人打开村民交易后，经末地折跃门到达远端，使村民区块卸载；远端提供可交互的陷阱箱和返程机构。其他玩家或区块加载器不能让目标村民区块持续加载。
 
@@ -85,7 +57,7 @@ MIT
 
 绑定优先选择假人视线 5 格内的可交易村民；没有合适目标时选择半径 5 格内最近的可交易村民。绑定后显示该村民当前已解锁的所有报价，包括买入和卖出。运行中的假人须先停止交易再重新绑定。
 
-### 选择报价
+#### 选择报价
 
 交易列表形式为：`物品名称 [按轮次] [按数量]`。
 
@@ -98,7 +70,7 @@ MIT
 /voidtrade TradeBot trades
 ```
 
-### 开始交易
+#### 开始交易
 
 按装置轮数交易：
 
@@ -122,7 +94,7 @@ MIT
 
 多个相同物品 ID 的附魔书可用不同报价编号区分。交易支持绿宝石、绿宝石加其他物品，以及出售物品换取绿宝石。
 
-### 材料、收纳与停止
+#### 材料、收纳与停止
 
 材料不足以完成目标时会提示，仍交易所有能够支付的部分。最后剩余材料只能支付较少交易时，也会继续成交；不足一笔报价的材料保留。每笔交易按该报价的完整数量成交，因此累计产物可能略超过 `count` 目标。
 
@@ -137,14 +109,14 @@ MIT
 
 假人离线、服务端重启后，需要重新绑定和启动任务。菜单异常、报价变化或装置超时会提示停止原因。
 
-### 旧版命令
+#### 旧版命令
 
 ```mcfunction
 /voidtrade TradeBot start minecraft:diamond 100
 /voidtrade TradeBot start minecraft:enchanted_book 100 minecraft:mending
 ```
 
-### 返程冷却设置
+#### 返程冷却设置
 
 配置文件：服务器的 `config/fake_player_void_trading.json`。修改后重启服务器。
 
@@ -163,8 +135,29 @@ MIT
 
 其余时间设置单位为游戏 tick，正常速度为 20 tick/秒。`phaseTimeoutTicks` 是阶段等待上限，`trappedChestSearchTicks` 是寻找陷阱箱的等待时间；陷阱箱需要较长红石信号时可增大 `trappedChestOpenTicks`。
 
-## 下载
+## 构建
+
+需要 **JDK 25**（Minecraft 26.x 要求）。
+
+```bash
+./gradlew build
+```
+
+产物：`build/libs/carpet-acmax-addition-v1.5.6.jar`（放进服务端 `mods/` 即可，客户端无需安装）。
+
+## 运行依赖
+
+- Minecraft 26.2（`main` 分支）或 26.1.2（`26.1.2` 分支）
+- Fabric Loader ≥ 0.19.3（`main` 分支），26.1.2 分支沿用原依赖
+- [Fabric API](https://modrinth.com/mod/fabric-api)
+- [Carpet](https://modrinth.com/mod/carpet)
+
+适用于假人虚空交易的依赖为 Carpet 26.2 和对应 Minecraft 26.2 的 Fabric API；不需要客户端前置。
 
 从 [Releases](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.6) 下载 `carpet-acmax-addition-v1.5.6.jar`，放入服务器 `mods`。单人游戏放入本地 Fabric 实例的 `mods`。客户端无需安装本扩展，请勿同时安装独立 `fake_player_void_trading`。
 
 [旧版回滚](docs/ROLLBACK.zh.md) · [验证结果](VALIDATION.md)
+
+## License
+
+MIT
