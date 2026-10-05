@@ -72,6 +72,8 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 
 #### 开始交易
 
+**mod会自动检测假人被传送到主岛折跃门处交易时，外岛折跃门处的村民是否真正被卸载，如果未被卸载则会等待卸载**
+
 按装置轮数交易：
 
 ```mcfunction
