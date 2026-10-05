@@ -1,13 +1,17 @@
 {
-    "carpet.rule.endGatewayCooldown.name": "禁用折跃门传送冷却",
-    "carpet.rule.endGatewayCooldown.desc": "禁用末地折跃门传送之间的2秒冷却。开启以允许无限制传送（无冷却）。",
-    "carpet.rule.itemEntityAlarm.name": "掉落物堆积警报",
-    "carpet.rule.itemEntityAlarm.desc": "当某个区块内的掉落物堆数达到设定阈值时，在聊天框向全服发送警报，包含坐标和数量。阈值可设为 1000 / 2000 / 4000 / 6000 四档，或任意自定义正整数；设为 0 关闭警报。",
-    "carpet.rule.railForceStatePlacement.name": "铁轨强制状态放置",
-    "carpet.rule.railForceStatePlacement.desc": "仅对使用轻松放置（Litematica，协议 V3）放置的铁轨生效：铁轨按投影中的形状放置，悬空/无支撑的铁轨也能放置，且本次放置不会改变周围铁轨的形状。事务结束后所有铁轨恢复正常行为（红石换向、无支撑掉落等完全不受影响）。",
-    "carpet.rule.cactusWrenchRailEnhancement.name": "仙人掌扳手铁轨增强",
-    "carpet.rule.cactusWrenchRailEnhancement.desc": "需与仙人掌扳手同时开启。手持仙人掌右键铁轨可依次切换所有形态，不触发方块更新和邻居更新。",
-    "carpet.rule.trialSpawnerIntervalFix.name": "修复试炼刷怪笼生成间隔",
-    "carpet.rule.trialSpawnerIntervalFix.desc": "开启后，将试炼密室中 chamber_8 与 encounter_4 结构使用的慢速试炼刷怪笼生成间隔从 160gt（8秒）修正为 20gt（1秒），与其它试炼刷怪笼一致。",
-    "carpet.category.ACMAX": "ACMAX 设置"
+  "carpet.rule.endGatewayCooldown.name": "禁用折跃门传送冷却",
+  "carpet.rule.endGatewayCooldown.desc": "禁用末地折跃门传送之间的2秒冷却。开启以允许无限制传送（无冷却）。",
+  "carpet.rule.itemEntityAlarm.name": "掉落物堆积警报",
+  "carpet.rule.itemEntityAlarm.desc": "当某个区块内的掉落物堆数达到设定阈值时，在聊天框向全服发送警报，包含坐标和数量。阈值可设为 1000 / 2000 / 4000 / 6000 四档，或任意自定义正整数；设为 0 关闭警报。",
+  "carpet.rule.railForceStatePlacement.name": "铁轨强制状态放置",
+  "carpet.rule.railForceStatePlacement.desc": "仅对使用轻松放置（Litematica，协议 V3）放置的铁轨生效：铁轨按投影中的形状放置，悬空/无支撑的铁轨也能放置，且本次放置不会改变周围铁轨的形状。事务结束后所有铁轨恢复正常行为（红石换向、无支撑掉落等完全不受影响）。",
+  "carpet.rule.cactusWrenchRailEnhancement.name": "仙人掌扳手铁轨增强",
+  "carpet.rule.cactusWrenchRailEnhancement.desc": "需与仙人掌扳手同时开启。手持仙人掌右键铁轨可依次切换所有形态，不触发方块更新和邻居更新。",
+  "carpet.rule.trialSpawnerIntervalFix.name": "修复试炼刷怪笼生成间隔",
+  "carpet.rule.trialSpawnerIntervalFix.desc": "开启后，将试炼密室中 chamber_8 与 encounter_4 结构使用的慢速试炼刷怪笼生成间隔从 160gt（8秒）修正为 20gt（1秒），与其它试炼刷怪笼一致。",
+  "carpet.category.ACMAX": "ACMAX 设置",
+  "carpet.rule.fakePlayerVoidTrading.name": "假人虚空交易",
+  "carpet.rule.fakePlayerVoidTrading.desc": "允许服务端 Carpet 假人虚空交易、村民绑定及聊天交易选项，默认关闭。开启后可使用 /voidtrade；支持原版单材料和双材料报价。关闭后停止任务，status/stop 仍可使用。",
+  "carpet.rule.fakePlayerVoidTradingAllowNonOp.name": "允许非OP使用假人虚空交易指令",
+  "carpet.rule.fakePlayerVoidTradingAllowNonOp.desc": "控制全部 /voidtrade 指令的权限。false：仅 OP（权限等级至少2）和控制台可用；true：所有玩家可用。默认 false。修改后立即更新在线玩家的指令补全；开启交易仍需 fakePlayerVoidTrading。"
 }

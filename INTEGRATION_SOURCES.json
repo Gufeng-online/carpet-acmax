@@ -1,0 +1,36 @@
+{
+  "upstream": {
+    "url": "https://github.com/Gufeng-online/carpet-acmax",
+    "branch": "main",
+    "commit": "31bf26b5385c27c16988a027bfc83f82e9aceae6"
+  },
+  "integration_version": "v1.5.6",
+  "sources": [
+    {
+      "directory": "fake player void trading",
+      "version": "1.0.0",
+      "minecraft": "26.2",
+      "sha256": {
+        "build.gradle": "41701ae9bf2dd1f051dc7ca6dbb3c5b052b0a622b264b2adf9581a078619590a",
+        "gradle.properties": "7754e1f20883420d6f4b0bf456b1513c05dbe223680a89d5d2829b8ffffb5cea",
+        "LICENSE": "6d7e41c0cc8352bc887a0d4926730d72a2a5ded389bc3acbb48489263f6e0fae",
+        "README.md": "e55b5937aa9a8e92d9f950b08cb2b82a13cdfd82b5b0ac935e636fd41318e254",
+        "src/main/java/com/cntrident/fakevoidtrading/FakeVoidTrading.java": "fb017fcf72858700ee75acbfb5d45f538703fe88eb4c4ff78eead4446fd2f137",
+        "src/main/java/com/cntrident/fakevoidtrading/InventoryStore.java": "56704f8937f0bd4eb0eb9cf9d027e58262b4fe8ab924bfba051c22629b225c80",
+        "src/main/java/com/cntrident/fakevoidtrading/mixin/MerchantMenuMixin.java": "12267a1c28743de20106545d76569e2d50ff6be74066ec1ee4295b7376ef2341",
+        "src/main/java/com/cntrident/fakevoidtrading/ServerConfig.java": "f667179e96e0dfb35d89ae90eab9769be40b008fc89b0c025333b3ae30b33600",
+        "src/main/java/com/cntrident/fakevoidtrading/TradeSession.java": "211f99f4de311f6ac634fde187f5d5d170942465f9a6b8044af8e01d33089a39",
+        "src/main/resources/fabric.mod.json": "e60324f61c52163859e16ce7bb4f21b128499757d55a0d90632d026d8543bfdb",
+        "src/main/resources/fake_player_void_trading.mixins.json": "887bc35b185455dd0707be3eb564c781de2aa91b7937abbfac73170ef92b9416",
+        "src/test/java/com/cntrident/fakevoidtrading/InventoryStoreTest.java": "f05f77e2f6edd845a13a2678e31dfdb20aed20bbd3a4dd5ff646d1883109ee5b"
+      }
+    }
+  ],
+  "previous_version_backup": "../carpet-acmax-backups/carpet-acmax-code-20261004-003735.zip",
+  "chinese_names_source": {
+    "minecraft": "26.2",
+    "asset": "minecraft/lang/zh_cn.json",
+    "asset_sha1": "f87510f4509890eaf176e0de1430f6bb326a6800",
+    "keys": "item.minecraft.*, block.minecraft.*, enchantment.minecraft.*"
+  }
+}

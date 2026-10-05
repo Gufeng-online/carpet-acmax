@@ -1,6 +1,10 @@
 @echo off
-cd /d "D:\mc\¿ª·¢\carpet-acmax-26.1.2"
-set "JAVA_HOME=C:\Users\29800\AppData\Roaming\.hmcl\java\windows-x86_64\mojang-java-runtime-epsilon"
-echo ÕýÔÚÆô¶¯ Minecraft ¿ª·¢¿Í»§¶Ë£¬Ê×´ÎÆô¶¯ÐèÒª±àÒë£¬ÇëÉÔºò...
-call gradlew.bat runClient
+chcp 65001 >nul
+cd /d "%~dp0"
+if not defined JAVA_HOME (
+  echo è¯·å…ˆå°† JAVA_HOME è®¾ç½®ä¸º JDK 25 è·¯å¾„ã€‚
+  pause
+  exit /b 1
+)
+call gradlew.bat runClient --console=plain
 pause

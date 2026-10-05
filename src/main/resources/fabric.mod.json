@@ -1,42 +1,47 @@
 {
-	"schemaVersion": 1,
-	"id": "carpet-acmax",
-	"version": "${version}",
-	"name": "Carpet ACMAX addition",
-	"description": "Carpet extension that adds end gateway cooldown toggle.",
-	"authors": [
-		"Gufeng"
-	],
-	"contact": {
-		"homepage": "https://github.com/Gufeng/carpet-acmax",
-		"sources": "https://github.com/Gufeng/carpet-acmax"
-	},
-	"license": "MIT",
-	"icon": "assets/carpet-acmax/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"com.gufeng.CarpetACMAX"
-		],
-		"client": [
-			"com.gufeng.client.CarpetACMAXClient"
-		],
-		"fabric-datagen": [
-			"com.gufeng.client.CarpetACMAXDataGenerator"
-		]
-	},
-	"mixins": [
-		"carpet-acmax.mixins.json",
-		{
-			"config": "carpet-acmax.client.mixins.json",
-			"environment": "client"
-		}
-	],
-	"depends": {
-		"fabricloader": ">=0.15.0",
-		"minecraft": ">=26.2",
-		"java": ">=25",
-		"fabric-api": "*",
-		"carpet": "*"
-	}
+  "schemaVersion": 1,
+  "id": "carpet-acmax",
+  "version": "${version}",
+  "name": "Carpet ACMAX addition",
+  "description": "Carpet ACMAX server rules and Carpet fake-player void trading for Minecraft 26.2.",
+  "authors": [
+    "Gufeng",
+    "CNTrident"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Gufeng-online/carpet-acmax",
+    "sources": "https://github.com/Gufeng-online/carpet-acmax"
+  },
+  "license": "MIT",
+  "icon": "assets/carpet-acmax/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.gufeng.CarpetACMAX"
+    ],
+    "client": [
+      "com.gufeng.client.CarpetACMAXClient"
+    ],
+    "fabric-datagen": [
+      "com.gufeng.client.CarpetACMAXDataGenerator"
+    ]
+  },
+  "mixins": [
+    "carpet-acmax.mixins.json",
+    {
+      "config": "carpet-acmax.client.mixins.json",
+      "environment": "client"
+    },
+    "fake_player_void_trading.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "26.2",
+    "java": ">=25",
+    "fabric-api": "*",
+    "carpet": "*"
+  },
+  "breaks": {
+    "fake_player_void_trading": "*"
+  }
 }

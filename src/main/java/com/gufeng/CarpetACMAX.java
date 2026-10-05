@@ -20,6 +20,7 @@ public class CarpetACMAX implements ModInitializer {
 
 		// Register Carpet extension
 		CarpetServer.manageExtension(new CarpetACMAXExtension());
+		new com.cntrident.fakevoidtrading.FakeVoidTrading().onInitialize();
 	}
 
 	public static Identifier id(String path) {
