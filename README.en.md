@@ -1,38 +1,43 @@
-# Carpet-ACMAX v1.5.6
+# Carpet-ACMAX
 
 [简体中文](README.md) | **English**
 
-A Carpet extension for **Minecraft 26.2 / Fabric / Java 25**, featuring fake-player void trading, end-gateway cooldown control, item-entity alerts and rail tools.
+A [Carpet](https://github.com/gnembon/fabric-carpet) extension written for the ACMAX server.
+**Server-side only** – install it on the server and it just works; clients do not need it
+(unless a rule says otherwise).
 
-## What's new in v1.5.6
+## Versions and branches
 
-- Bind a bot to a villager in its line of sight, or the nearest tradeable villager within five blocks. The villager glows for three seconds and the caller receives a Chinese trade list.
-- Hover for actual prices, ingredients, outputs and enchantments. Use separate cycle/count buttons to fill in a command, then enter the target number.
-- Buy, sell and use two-ingredient offers; select enchanted books by offer number without an item ID.
-- Insufficient materials trigger a notice and the bot trades everything it can afford.
-- Prefer empty shulkers, split stacked boxes one at a time as needed, and keep overflow in the bot inventory.
-- Configurable return cooldown, default two seconds, runs during trading and storage. Return waits for both storage completion and cooldown expiry.
-- Optional access for non-OP players; commands default to OP-only.
+| Branch | Minecraft | Fabric API | Carpet | Mod version |
+| --- | --- | --- | --- | --- |
+| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.6 |
+| `26.1.2` | 26.1.2 | 0.155.2+26.1.2 | 26.1 | v1.2 |
 
-## Installation
+Both branches provide the five rules below. The `main` branch also includes fake-player void trading.
 
-Download `carpet-acmax-addition-v1.5.6.jar` from [Releases](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.6) and put it in the server's `mods` folder. Requires Fabric Loader **0.19.3+**, [Fabric API for 26.2](https://modrinth.com/mod/fabric-api) and [Carpet 26.2](https://modrinth.com/mod/carpet/version/26.2).
+## Rules
 
-Clients do not need this extension. For single-player, install it in your Fabric instance. Do not install the standalone `fake_player_void_trading` alongside it.
+All rules live in the `ACMAX` category and can be changed with the `/carpet` command or in
+`config/carpet-acmax.conf`.
 
-## Carpet rules
+| Rule | Default | Description |
+| --- | --- | --- |
+| `endGatewayCooldown` | `false` | Disables the 2-second cooldown between end gateway teleports, allowing unlimited teleporting. |
+| `itemEntityAlarm` | `0` | Item pile-up alarm: alerts everyone in chat with coordinates and stack count when a single chunk reaches the threshold. Presets are `1000 / 2000 / 4000 / 6000`, any custom positive integer works, and `0` disables the alarm. |
+| `railForceStatePlacement` | `false` | Forced rail state placement: only affects rails placed with Easy Place (Litematica protocol V3). Rails keep the shape from the schematic (floating / unsupported rails included) and the placement does not reshape the surrounding rails. Everything returns to vanilla behaviour as soon as the placement transaction ends, so redstone reshaping and unsupported rails dropping are completely unaffected. |
+| `cactusWrenchRailEnhancement` | `false` | Cactus wrench rail enhancement (also requires `flippinCactus`): right-click rails with a cactus to cycle through every shape without triggering block or neighbour updates. |
+| `trialSpawnerIntervalFix` | `false` | Fixes the trial spawner interval: the 160gt (8 second) interval used by the `chamber_8` and `encounter_4` structures of trial chambers becomes the normal 20gt (1 second). |
 
-View rules with `/carpet list ACMAX`.
+## Additional feature: fake-player void trading
+
+Available on `main` for Minecraft 26.2. Requires a working void-trading device.
+
+### Enable trading and command access
 
 | Rule | Default | Function |
 | --- | --- | --- |
-| `fakePlayerVoidTrading` | `false` | Enable fake-player void trading. Turning it off stops active tasks. |
+| `fakePlayerVoidTrading` | `false` | Enable fake-player trading; turning it off stops active tasks. |
 | `fakePlayerVoidTradingAllowNonOp` | `false` | Allow everyone to use all `/voidtrade` commands when true; otherwise require OP level 2+. |
-| `endGatewayCooldown` | `false` | Remove the end gateway's two-second teleport cooldown. |
-| `itemEntityAlarm` | `0` | Broadcast a chunk's coordinates and item-stack count at the chosen threshold. Zero disables it. |
-| `railForceStatePlacement` | `false` | Place rails in the schematic's shape with easy place, including unsupported rails. |
-| `cactusWrenchRailEnhancement` | `false` | With Carpet's `flippinCactus`, right-click rails with a cactus to change their shape. |
-| `trialSpawnerIntervalFix` | `false` | Change abnormal eight-second spawn intervals in certain trial chambers to one second. |
 
 ```mcfunction
 /carpet fakePlayerVoidTrading true
@@ -43,7 +48,7 @@ View rules with `/carpet list ACMAX`.
 
 `setDefault` persists the setting across restarts. Managing Carpet rules still requires administrative permission. With trading disabled, `status` and `stop` remain available subject to the command-access rule.
 
-## Fake-player void trading
+### Usage
 
 Prepare a working void-trading device: the bot opens a villager trade, travels through an end gateway so the villager's chunk unloads, then uses a trapped chest and return mechanism at the remote end. Other players or chunk loaders must not keep the villager loaded.
 
@@ -80,7 +85,7 @@ Legacy commands:
 /voidtrade TradeBot start minecraft:enchanted_book 100 minecraft:mending
 ```
 
-## Return cooldown
+### Return cooldown
 
 Edit the server's `config/fake_player_void_trading.json` and restart:
 
@@ -99,8 +104,30 @@ Edit the server's `config/fake_player_void_trading.json` and restart:
 
 Other durations use game ticks, normally 20 ticks per second. Increase `trappedChestOpenTicks` if your device needs a longer redstone pulse.
 
-## Downloads and previous versions
+## Download
 
-[Download v1.5.6](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.6) · [Rollback instructions](docs/ROLLBACK.zh.md) · [Validation](VALIDATION.md)
+Get `carpet-acmax-addition-v1.5.6.jar` from [Releases](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.6) and put it in the server `mods` folder, or your local Fabric instance for single-player. Clients do not need this extension. Do not install standalone `fake_player_void_trading` alongside it.
 
-MIT license; third-party licenses are in `licenses/`.
+[Rollback](docs/ROLLBACK.zh.md) · [Validation](VALIDATION.md)
+
+## Building
+
+Requires **JDK 25** (Minecraft 26.x requires it).
+
+```bash
+./gradlew build
+```
+
+Output: `build/libs/carpet-acmax-addition-v1.5.6.jar` – drop it into the server `mods/` folder,
+no client installation needed.
+
+## Requirements
+
+- Minecraft 26.2 (`main` branch) or 26.1.2 (`26.1.2` branch)
+- Fabric Loader ≥ 0.19.3 for `main`; the 26.1.2 branch keeps its original requirements
+- [Fabric API](https://modrinth.com/mod/fabric-api)
+- [Carpet](https://modrinth.com/mod/carpet)
+
+## License
+
+MIT

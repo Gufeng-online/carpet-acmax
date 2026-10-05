@@ -1,56 +1,48 @@
-# Carpet-ACMAX v1.5.6
+# Carpet-ACMAX
 
 **简体中文** | [English](README.en.md)
 
-适用于 **Minecraft 26.2 / Fabric / Java 25** 的 Carpet 扩展，提供假人虚空交易、折跃门冷却调整、掉落物警报和铁轨增强等功能。
+ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩展。
+**纯服务端规则**：只装在服务端即可生效，客户端可以不装（除特别标注的规则外）。
 
-## v1.5.6 更新内容
+## 版本与分支
 
-- 假人可手动绑定村民，绑定优先选择视线内目标，没有目标时选择 5 格内最近的可交易村民；绑定后村民发光 3 秒，并向执行者显示中文交易列表。
-- 悬停交易名称查看实际价格、所需材料、产物和附魔；点击 `[按轮次]` 或 `[按数量]` 填入命令，再填写目标数字。
-- 支持购买、出售和双材料交易；可按报价编号选择不同附魔书，无需填写物品 ID。
-- 目标高于现有材料可交易的数量时，提示后继续尽力交易，材料不足时正常结束。
-- 产物优先存入空潜影盒，盒子不足时留在假人背包；堆叠潜影盒按需一次展开一个。
-- 返程冷却默认 2 秒，可自定义；交易和收纳期间也计时，收纳完成且冷却结束后再点击陷阱箱。
-- 新增非 OP 指令权限开关，默认仅 OP 可用，开启后所有玩家均可使用 `/voidtrade`。
+| 分支 | Minecraft | Fabric API | Carpet 依赖 | 模组版本 |
+| --- | --- | --- | --- | --- |
+| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.6 |
+| `26.1.2` | 26.1.2 | 0.155.2+26.1.2 | 26.1 | v1.2 |
 
-## 安装
+两个分支均提供下列五项规则；`main` 分支另提供假人虚空交易功能。
 
-从 [Releases](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.6) 下载 `carpet-acmax-addition-v1.5.6.jar`，放入服务器的 `mods` 文件夹，同时安装：
+## 规则列表
 
-- Fabric Loader **0.19.3 或更新版本**。
-- 适用于 Minecraft 26.2 的 [Fabric API](https://modrinth.com/mod/fabric-api)。
-- [Carpet 26.2](https://modrinth.com/mod/carpet/version/26.2)。
+规则分类为 `ACMAX`，通过 `/carpet` 指令或 `config/carpet-acmax.conf` 修改。
 
-客户端无需安装本扩展。单人游戏放入本地 Fabric 实例的 `mods` 文件夹即可。请勿同时安装独立的 `fake_player_void_trading`。
+| 规则 | 默认值 | 说明 |
+| --- | --- | --- |
+| `endGatewayCooldown` | `false` | 禁用末地折跃门传送之间的 2 秒冷却，允许无限制连续传送。 |
+| `itemEntityAlarm` | `0` | 掉落物堆积警报：某一区块内的掉落物堆数达到阈值时向全服通报坐标与数量。预设档位 `1000 / 2000 / 4000 / 6000`，也可填任意正整数，`0` 为关闭。 |
+| `railForceStatePlacement` | `false` | 铁轨强制状态放置：只对「轻松放置」（Litematica 协议 V3）放置的铁轨生效。铁轨按投影形状放置（含悬空、无支撑的铁轨），且本次放置不会让周围铁轨变形。事务结束后立即恢复原版行为，红石换向、无支撑掉落等特性完全不受影响。 |
+| `cactusWrenchRailEnhancement` | `false` | 仙人掌扳手铁轨增强（需同时开启 `flippinCactus`）：手持仙人掌右键铁轨可依次切换所有形态，且不触发方块 / 邻居更新。 |
+| `trialSpawnerIntervalFix` | `false` | 修复试炼刷怪笼生成间隔：把试炼密室 `chamber_8`、`encounter_4` 结构中 160gt（8 秒）的生成间隔修正为正常的 20gt（1 秒）。 |
 
-## Carpet 规则
+## 附加功能：假人虚空交易
 
-使用 `/carpet list ACMAX` 查看规则。
+适用于 `main` 分支的 Minecraft 26.2。需要可正常运行的虚空交易装置，假人负责交易、收纳产物和点击返程陷阱箱。
+
+### 开关与权限
 
 | 规则 | 默认值 | 功能 |
 | --- | --- | --- |
-| `fakePlayerVoidTrading` | `false` | 开启假人虚空交易。关闭后停止正在运行的交易任务。 |
+| `fakePlayerVoidTrading` | `false` | 开启假人虚空交易；关闭后停止正在运行的交易任务。 |
 | `fakePlayerVoidTradingAllowNonOp` | `false` | 开启后所有玩家可使用全部 `/voidtrade` 指令；关闭时仅 OP（权限等级至少 2）可用。 |
-| `endGatewayCooldown` | `false` | 开启后取消末地折跃门的 2 秒传送冷却。 |
-| `itemEntityAlarm` | `0` | 区块内掉落物堆数达到设定值时通报坐标和数量；`0` 关闭，可设任意正整数。 |
-| `railForceStatePlacement` | `false` | 使用轻松放置时，按投影形状放置铁轨，支持悬空铁轨。 |
-| `cactusWrenchRailEnhancement` | `false` | 配合 Carpet 的 `flippinCactus`，手持仙人掌右键切换铁轨形态。 |
-| `trialSpawnerIntervalFix` | `false` | 将特定试炼密室中异常的 8 秒刷怪间隔调整为 1 秒。 |
-
-开启交易功能：
 
 ```mcfunction
 /carpet fakePlayerVoidTrading true
-```
-
-允许非 OP 玩家使用绑定、交易、查询和停止指令：
-
-```mcfunction
 /carpet fakePlayerVoidTradingAllowNonOp true
 ```
 
-使用 `setDefault` 保存规则，服务器重启后仍生效：
+使用 `setDefault` 保存设置，服务器重启后仍生效：
 
 ```mcfunction
 /carpet setDefault fakePlayerVoidTrading true
@@ -58,8 +50,6 @@
 ```
 
 修改 Carpet 规则仍需要相应管理权限。交易总开关关闭时，`status` 和 `stop` 仍可使用，并遵守指令权限规则。
-
-## 假人虚空交易用法
 
 ### 准备装置和假人
 
@@ -133,7 +123,7 @@
 /voidtrade TradeBot start minecraft:enchanted_book 100 minecraft:mending
 ```
 
-## 返程冷却设置
+### 返程冷却设置
 
 配置文件：服务器的 `config/fake_player_void_trading.json`。修改后重启服务器。
 
@@ -152,8 +142,29 @@
 
 其余时间设置单位为游戏 tick，正常速度为 20 tick/秒。`phaseTimeoutTicks` 是阶段等待上限，`trappedChestSearchTicks` 是寻找陷阱箱的等待时间；陷阱箱需要较长红石信号时可增大 `trappedChestOpenTicks`。
 
-## 下载与旧版
+## 下载
 
-[下载 v1.5.6](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.6) · [回滚说明](docs/ROLLBACK.zh.md) · [验证结果](VALIDATION.md)
+从 [Releases](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.6) 下载 `carpet-acmax-addition-v1.5.6.jar`，放入服务器 `mods`。单人游戏放入本地 Fabric 实例的 `mods`。客户端无需安装本扩展，请勿同时安装独立 `fake_player_void_trading`。
 
-MIT 许可证；第三方许可见 `licenses/`。
+[旧版回滚](docs/ROLLBACK.zh.md) · [验证结果](VALIDATION.md)
+
+## 构建
+
+需要 **JDK 25**（Minecraft 26.x 要求）。
+
+```bash
+./gradlew build
+```
+
+产物：`build/libs/carpet-acmax-addition-v1.5.6.jar`（放进服务端 `mods/` 即可，客户端无需安装）。
+
+## 运行依赖
+
+- Minecraft 26.2（`main` 分支）或 26.1.2（`26.1.2` 分支）
+- Fabric Loader ≥ 0.19.3（`main` 分支）；26.1.2 分支沿用原依赖
+- [Fabric API](https://modrinth.com/mod/fabric-api)
+- [Carpet](https://modrinth.com/mod/carpet)
+
+## License
+
+MIT
