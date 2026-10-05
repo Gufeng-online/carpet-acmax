@@ -12,7 +12,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 | `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.6 |
 | `26.1.2` | 26.1.2 | 0.155.2+26.1.2 | 26.1 | v1.2 |
 
-两个分支均提供下列五项规则；`main` 分支另提供假人虚空交易功能。
+两个分支均提供以下五项规则；`main` 分支另提供下文的假人虚空交易功能。
 
 ## 规则列表
 
@@ -25,6 +25,27 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 | `railForceStatePlacement` | `false` | 铁轨强制状态放置：只对「轻松放置」（Litematica 协议 V3）放置的铁轨生效。铁轨按投影形状放置（含悬空、无支撑的铁轨），且本次放置不会让周围铁轨变形。事务结束后立即恢复原版行为，红石换向、无支撑掉落等特性完全不受影响。 |
 | `cactusWrenchRailEnhancement` | `false` | 仙人掌扳手铁轨增强（需同时开启 `flippinCactus`）：手持仙人掌右键铁轨可依次切换所有形态，且不触发方块 / 邻居更新。 |
 | `trialSpawnerIntervalFix` | `false` | 修复试炼刷怪笼生成间隔：把试炼密室 `chamber_8`、`encounter_4` 结构中 160gt（8 秒）的生成间隔修正为正常的 20gt（1 秒）。 |
+
+## 构建
+
+需要 **JDK 25**（Minecraft 26.x 要求）。
+
+```bash
+./gradlew build
+```
+
+产物：`build/libs/carpet-acmax-addition-v1.5.6.jar`（放进服务端 `mods/` 即可，客户端无需安装）。
+
+## 运行依赖
+
+- Minecraft 26.2（`main` 分支）或 26.1.2（`26.1.2` 分支）
+- Fabric Loader ≥ 0.19.3（`main` 分支），26.1.2 分支沿用原依赖
+- [Fabric API](https://modrinth.com/mod/fabric-api)
+- [Carpet](https://modrinth.com/mod/carpet)
+
+## License
+
+MIT
 
 ## 附加功能：假人虚空交易
 
@@ -147,24 +168,3 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 从 [Releases](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.6) 下载 `carpet-acmax-addition-v1.5.6.jar`，放入服务器 `mods`。单人游戏放入本地 Fabric 实例的 `mods`。客户端无需安装本扩展，请勿同时安装独立 `fake_player_void_trading`。
 
 [旧版回滚](docs/ROLLBACK.zh.md) · [验证结果](VALIDATION.md)
-
-## 构建
-
-需要 **JDK 25**（Minecraft 26.x 要求）。
-
-```bash
-./gradlew build
-```
-
-产物：`build/libs/carpet-acmax-addition-v1.5.6.jar`（放进服务端 `mods/` 即可，客户端无需安装）。
-
-## 运行依赖
-
-- Minecraft 26.2（`main` 分支）或 26.1.2（`26.1.2` 分支）
-- Fabric Loader ≥ 0.19.3（`main` 分支）；26.1.2 分支沿用原依赖
-- [Fabric API](https://modrinth.com/mod/fabric-api)
-- [Carpet](https://modrinth.com/mod/carpet)
-
-## License
-
-MIT
