@@ -4,7 +4,7 @@
     "branch": "main",
     "commit": "31bf26b5385c27c16988a027bfc83f82e9aceae6"
   },
-  "integration_version": "v1.5.6",
+  "integration_version": "v1.5.7",
   "sources": [
     {
       "directory": "fake player void trading",
@@ -26,7 +26,7 @@
       }
     }
   ],
-  "previous_version_backup": "../carpet-acmax-backups/carpet-acmax-code-20261004-003735.zip",
+  "previous_version_backup": "../carpet-acmax-backups/carpet-acmax-before-open-commands-20261019-225212.zip",
   "chinese_names_source": {
     "minecraft": "26.2",
     "asset": "minecraft/lang/zh_cn.json",

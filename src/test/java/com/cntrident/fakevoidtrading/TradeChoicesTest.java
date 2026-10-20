@@ -31,22 +31,32 @@ class TradeChoicesTest {
     }
     @Test void rulesDefaultOff() {
         assertFalse(ACMAXSettings.fakePlayerVoidTrading);
-        assertFalse(ACMAXSettings.fakePlayerVoidTradingAllowNonOp);
     }
-    @Test void commandPermissionCanBeOpenedToEveryoneAndRestrictedAgain() {
-        boolean original = ACMAXSettings.fakePlayerVoidTradingAllowNonOp;
+    @Test void nonOpCanUseAllCommandsWhenEnabledAndStatusStopWhenDisabled() {
+        var source = net.minecraft.commands.Commands.createCompilationContext(
+                net.minecraft.server.permissions.PermissionSet.NO_PERMISSIONS);
+        boolean original = ACMAXSettings.fakePlayerVoidTrading;
         try {
-            ACMAXSettings.fakePlayerVoidTradingAllowNonOp = false;
-            assertFalse(FakeVoidTrading.commandPermissionAllowed(false));
-            assertTrue(FakeVoidTrading.commandPermissionAllowed(true));
-            ACMAXSettings.fakePlayerVoidTradingAllowNonOp = true;
-            assertTrue(FakeVoidTrading.commandPermissionAllowed(false));
-            assertTrue(FakeVoidTrading.commandPermissionAllowed(true));
-            ACMAXSettings.fakePlayerVoidTradingAllowNonOp = false;
-            assertFalse(FakeVoidTrading.commandPermissionAllowed(false));
+            var root = FakeVoidTrading.commandTree().build();
+            var bot = root.getChild("bot");
+            assertTrue(root.canUse(source));
+            assertTrue(bot.canUse(source));
+            for (boolean enabled : new boolean[]{true, false, true}) {
+                ACMAXSettings.fakePlayerVoidTrading = enabled;
+                for (String name : List.of("start", "offer", "item", "bind", "trades"))
+                    assertEquals(enabled, bot.getChild(name).canUse(source), name);
+                assertTrue(bot.getChild("status").canUse(source));
+                assertTrue(bot.getChild("stop").canUse(source));
+                var offer = bot.getChild("offer").getChild("offer");
+                assertTrue(offer.getChild("cycle").canUse(source));
+                assertTrue(offer.getChild("count").canUse(source));
+            }
         } finally {
-            ACMAXSettings.fakePlayerVoidTradingAllowNonOp = original;
+            ACMAXSettings.fakePlayerVoidTrading = original;
         }
+    }
+    @Test void separateNonOpRuleIsRemoved() {
+        assertThrows(NoSuchFieldException.class, () -> ACMAXSettings.class.getDeclaredField("fakePlayerVoidTradingAllowNonOp"));
     }
     @Test void autoBindingRuleIsRemoved() {
         assertThrows(NoSuchFieldException.class, () -> ACMAXSettings.class.getDeclaredField("fakePlayerVoidTradingAutoBind"));

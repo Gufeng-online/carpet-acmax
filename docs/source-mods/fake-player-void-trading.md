@@ -1,10 +1,10 @@
 # Fake Player Void Trading
 
-Minecraft **26.2 / Fabric / Java 25** 服务端模组，使用 **Carpet 假人**自动运行虚空交易装置。本文描述整合版 v1.5.6；原客户端项目已独立修复材料不足并升级 3.1.9。
+Minecraft **26.2 / Fabric / Java 25** 服务端模组，使用 **Carpet 假人**自动运行虚空交易装置。本文描述整合版 v1.5.7；原客户端项目已独立修复材料不足并升级 3.1.9。
 
 ## 安装
 
-将 `releases/carpet-acmax-addition-v1.5.6.jar` 放入服务器 `mods` 文件夹，同时安装适用于 26.2 的 Fabric API 和 [Carpet 26.2](https://modrinth.com/mod/carpet/version/26.2)。客户端无需安装本模组，也不需要 Item Scroller、MaLiLib 或 Quick Shulker。单人游戏可装在本地 Fabric 实例中，逻辑仍运行于内置服务器。
+将 `releases/carpet-acmax-addition-v1.5.7.jar` 放入服务器 `mods` 文件夹，同时安装适用于 26.2 的 Fabric API 和 [Carpet 26.2](https://modrinth.com/mod/carpet/version/26.2)。客户端无需安装本模组，也不需要 Item Scroller、MaLiLib 或 Quick Shulker。单人游戏可装在本地 Fabric 实例中，逻辑仍运行于内置服务器。
 
 ## 规则与绑定
 
@@ -14,7 +14,7 @@ Minecraft **26.2 / Fabric / Java 25** 服务端模组，使用 **Carpet 假人**
 
 1. 用 Carpet 的 `/player TradeBot spawn` 创建假人，将它放在目标成年村民 4.5 格交互范围内。给假人携带绿宝石、需要的书、潜影盒，并留出背包空间。绿宝石和书也可放在假人携带的潜影盒里。
 2. 装置必须能在打开交易后将假人送入末地折跃门，在远端提供假人能够右键的陷阱箱，并通过机关将假人送回原村民。模组负责交易和点击容器；位置移动由现有装置完成。
-3. 使用以下命令启动，命令默认要求 OP 2 级或服务器控制台权限：
+3. 使用以下命令启动，开启功能后所有玩家均可使用以下命令：
 
 ```mcfunction
 /voidtrade TradeBot start minecraft:diamond 100
@@ -75,7 +75,7 @@ $env:JAVA_HOME='你的 JDK 25 路径'
 
 潜影盒不足时尽量部分收纳，剩余产物留在假人背包，继续轮次；交易中也会尝试把已有产物移入盒中腾空间。只有背包也不能接收完整下一笔产物才停止，材料不因此被额外扣除。
 
-## v1.5.6 指令与堆叠盒
+## v1.5.7 指令与堆叠盒
 
 `/voidtrade BOT offer 1 cycle 数字` 按完整轮数；`/voidtrade BOT offer 1 count 数字` 按本次新产物数量。可选物品 ID 放在 offer 前，旧命令保留。目标数量不足仍交易能成交的部分，最后一次完整报价可能越过目标。输入不足一笔时零头保留，不扣除无法完成交易的部分。堆叠盒在空位允许时拆开，保留内容与组件，预留一格产物槽。
 
@@ -87,12 +87,4 @@ $env:JAVA_HOME='你的 JDK 25 路径'
 
 ## 假人交易指令权限
 
-`fakePlayerVoidTradingAllowNonOp` 默认 false，控制全部 `/voidtrade` 子指令（绑定、列表、交易、状态、停止及旧指令形式）。false 时仅 OP 权限等级至少 2 可用；true 时所有玩家可用。服务器控制台可继续使用。修改后在线玩家的命令补全会自动刷新，无需重登。此规则不替代交易功能总开关，也不更改 Carpet 管理规则自身的权限。
-
-```mcfunction
-/carpet fakePlayerVoidTradingAllowNonOp true
-/carpet fakePlayerVoidTradingAllowNonOp false
-/carpet setDefault fakePlayerVoidTradingAllowNonOp true
-```
-
-最后一条保存「所有玩家可用」为世界默认值。首次升级保持原来的仅 OP 权限。
+开启 `fakePlayerVoidTrading` 后，所有玩家均可使用绑定、列表、交易、状态和停止等 `/voidtrade` 指令，不要求 OP。修改 Carpet 规则仍需相应管理权限。

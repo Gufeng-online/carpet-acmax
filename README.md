@@ -9,10 +9,10 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 
 | 分支 | Minecraft | Fabric API | Carpet 依赖 | 模组版本 |
 | --- | --- | --- | --- | --- |
-| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.6 |
+| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.7 |
 | `26.1.2` | 26.1.2 | 0.155.2+26.1.2 | 26.1 | v1.2 |
 
-两个分支均提供原有五项规则；假人虚空交易的两项规则仅适用于 `main` 分支。
+两个分支均提供原有五项规则；假人虚空交易规则仅适用于 `main` 分支。
 
 ## 规则列表
 
@@ -26,23 +26,20 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 | `cactusWrenchRailEnhancement` | `false` | 仙人掌扳手铁轨增强（需同时开启 `flippinCactus`）：手持仙人掌右键铁轨可依次切换所有形态，且不触发方块 / 邻居更新。 |
 | `trialSpawnerIntervalFix` | `false` | 修复试炼刷怪笼生成间隔：把试炼密室 `chamber_8`、`encounter_4` 结构中 160gt（8 秒）的生成间隔修正为正常的 20gt（1 秒）。 |
 | `fakePlayerVoidTrading` | `false` | 开启假人虚空交易；关闭后停止正在运行的交易任务。 |
-| `fakePlayerVoidTradingAllowNonOp` | `false` | 开启后所有玩家可使用全部 `/voidtrade` 指令；关闭时仅 OP（权限等级至少 2）可用。 |
 
 ### 虚空交易用法
 
 ```mcfunction
 /carpet fakePlayerVoidTrading true
-/carpet fakePlayerVoidTradingAllowNonOp true
 ```
 
 使用 `setDefault` 保存设置，服务器重启后仍生效：
 
 ```mcfunction
 /carpet setDefault fakePlayerVoidTrading true
-/carpet setDefault fakePlayerVoidTradingAllowNonOp true
 ```
 
-修改 Carpet 规则仍需要相应管理权限。交易总开关关闭时，`status` 和 `stop` 仍可使用，并遵守指令权限规则。
+开启假人虚空交易后，所有玩家均可使用绑定、列表、交易、查询和停止等 `/voidtrade` 指令，不要求 OP。修改 Carpet 规则仍需要相应管理权限；交易总开关关闭时，所有玩家仍可使用 `status` 和 `stop`。
 
 #### 准备装置和假人
 
@@ -145,7 +142,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 ./gradlew build
 ```
 
-产物：`build/libs/carpet-acmax-addition-v1.5.6.jar`（放进服务端 `mods/` 即可，客户端无需安装）。
+产物：`build/libs/carpet-acmax-addition-v1.5.7.jar`（放进服务端 `mods/` 即可，客户端无需安装）。
 
 ## 运行依赖
 
@@ -156,7 +153,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 
 适用于假人虚空交易的依赖为 Carpet 26.2 和对应 Minecraft 26.2 的 Fabric API；不需要客户端前置。
 
-从 [Releases](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.6) 下载 `carpet-acmax-addition-v1.5.6.jar`，放入服务器 `mods`。单人游戏放入本地 Fabric 实例的 `mods`。客户端无需安装本扩展，请勿同时安装独立 `fake_player_void_trading`。
+从 [Releases](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.7) 下载 `carpet-acmax-addition-v1.5.7.jar`，放入服务器 `mods`。单人游戏放入本地 Fabric 实例的 `mods`。客户端无需安装本扩展，请勿同时安装独立 `fake_player_void_trading`。
 
 [旧版回滚](docs/ROLLBACK.zh.md) · [验证结果](VALIDATION.md)
 

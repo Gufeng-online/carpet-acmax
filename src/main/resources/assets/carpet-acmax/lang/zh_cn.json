@@ -11,7 +11,5 @@
   "carpet.rule.trialSpawnerIntervalFix.desc": "开启后，将试炼密室中 chamber_8 与 encounter_4 结构使用的慢速试炼刷怪笼生成间隔从 160gt（8秒）修正为 20gt（1秒），与其它试炼刷怪笼一致。",
   "carpet.category.ACMAX": "ACMAX 设置",
   "carpet.rule.fakePlayerVoidTrading.name": "假人虚空交易",
-  "carpet.rule.fakePlayerVoidTrading.desc": "允许服务端 Carpet 假人虚空交易、村民绑定及聊天交易选项，默认关闭。开启后可使用 /voidtrade；支持原版单材料和双材料报价。关闭后停止任务，status/stop 仍可使用。",
-  "carpet.rule.fakePlayerVoidTradingAllowNonOp.name": "允许非OP使用假人虚空交易指令",
-  "carpet.rule.fakePlayerVoidTradingAllowNonOp.desc": "控制全部 /voidtrade 指令的权限。false：仅 OP（权限等级至少2）和控制台可用；true：所有玩家可用。默认 false。修改后立即更新在线玩家的指令补全；开启交易仍需 fakePlayerVoidTrading。"
+  "carpet.rule.fakePlayerVoidTrading.desc": "允许服务端 Carpet 假人虚空交易、村民绑定及聊天交易选项，默认关闭。开启后所有玩家均可使用 /voidtrade；支持原版单材料和双材料报价。关闭后停止任务，status/stop 仍可使用。"
 }

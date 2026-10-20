@@ -11,7 +11,5 @@
   "carpet.rule.trialSpawnerIntervalFix.desc": "When enabled, trial spawners in the chamber_8 and encounter_4 structures of trial chambers use the normal 20gt (1 second) spawn interval instead of 160gt (8 seconds).",
   "carpet.category.ACMAX": "ACMAX Settings",
   "carpet.rule.fakePlayerVoidTrading.name": "Fake player void trading",
-  "carpet.rule.fakePlayerVoidTrading.desc": "Enables server fake-player void trading, villager bindings and clickable trade choices. Disabled by default. Supports vanilla one- and two-input quotes. Disabling stops tasks; status/stop remain available.",
-  "carpet.rule.fakePlayerVoidTradingAllowNonOp.name": "Allow non-operators to use fake player void trading commands",
-  "carpet.rule.fakePlayerVoidTradingAllowNonOp.desc": "Permissions for all /voidtrade commands. False restricts access to operators with permission level 2 or higher and the console; true allows all players. Defaults to false. Online command trees refresh on changes. Starting trades still requires fakePlayerVoidTrading."
+  "carpet.rule.fakePlayerVoidTrading.desc": "Enables server fake-player void trading, villager bindings and clickable trade choices. Disabled by default. Supports vanilla one- and two-input quotes. Disabling stops tasks; status/stop remain available. All players can use /voidtrade when enabled."
 }

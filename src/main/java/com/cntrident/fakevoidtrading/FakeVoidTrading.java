@@ -42,34 +42,7 @@ public final class FakeVoidTrading implements ModInitializer {
     }
     @Override public void onInitialize() {
         ServerConfig.load();
-        CommandRegistrationCallback.EVENT.register((dispatcher, access, environment) -> {
-            var start = Commands.literal("start").requires(s -> com.gufeng.settings.ACMAXSettings.fakePlayerVoidTrading)
-                    .then(tradeArguments(true));
-            dispatcher.register(Commands.literal("voidtrade")
-                    .requires(source -> commandPermissionAllowed(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS).test(source)))
-                    .then(Commands.argument("bot", EntityArgument.player())
-                            .then(start)
-                            .then(offerArguments(false).requires(s -> com.gufeng.settings.ACMAXSettings.fakePlayerVoidTrading))
-                            .then(tradeArguments(false).requires(s -> com.gufeng.settings.ACMAXSettings.fakePlayerVoidTrading))
-                            .then(Commands.literal("bind").requires(s -> com.gufeng.settings.ACMAXSettings.fakePlayerVoidTrading)
-                                    .executes(c -> bind(c, false)))
-                            .then(Commands.literal("trades").requires(s -> com.gufeng.settings.ACMAXSettings.fakePlayerVoidTrading)
-                                    .executes(c -> bind(c, true)))
-                            .then(Commands.literal("status").executes(c -> {
-                                var bot = EntityArgument.getPlayer(c, "bot");
-                                var session = SESSIONS.get(bot.getUUID());
-                                c.getSource().sendSuccess(() -> Component.literal(bot.getName().getString() + ": "
-                                        + (session == null ? "空闲" : session.status())
-                                        + (VillagerBindings.get(bot) == null ? "；未绑定村民" : "；绑定村民 " + VillagerBindings.get(bot).villager())), false); return 1;
-                            }))
-                            .then(Commands.literal("stop").executes(c -> {
-                                var bot = EntityArgument.getPlayer(c, "bot");
-                                var session = SESSIONS.remove(bot.getUUID());
-                                if (session != null) session.stop(bot, "玩家手动停止");
-                                c.getSource().sendSuccess(() -> Component.literal("已停止 " + bot.getName().getString()), false);
-                                return 1;
-                            }))));
-        });
+        CommandRegistrationCallback.EVENT.register((dispatcher, access, environment) -> dispatcher.register(commandTree()));
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> VillagerBindings.disconnect(handler.player));
         ServerTickEvents.END_SERVER_TICK.register(FakeVoidTrading::tick);
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
@@ -77,6 +50,33 @@ public final class FakeVoidTrading implements ModInitializer {
             SESSIONS.clear();
             VillagerBindings.clear();
         });
+    }
+    static com.mojang.brigadier.builder.LiteralArgumentBuilder<CommandSourceStack> commandTree() {
+        var start = Commands.literal("start").requires(s -> com.gufeng.settings.ACMAXSettings.fakePlayerVoidTrading)
+                .then(tradeArguments(true));
+        return Commands.literal("voidtrade")
+                .then(Commands.argument("bot", EntityArgument.player())
+                        .then(start)
+                        .then(offerArguments(false).requires(s -> com.gufeng.settings.ACMAXSettings.fakePlayerVoidTrading))
+                        .then(tradeArguments(false).requires(s -> com.gufeng.settings.ACMAXSettings.fakePlayerVoidTrading))
+                        .then(Commands.literal("bind").requires(s -> com.gufeng.settings.ACMAXSettings.fakePlayerVoidTrading)
+                                .executes(c -> bind(c, false)))
+                        .then(Commands.literal("trades").requires(s -> com.gufeng.settings.ACMAXSettings.fakePlayerVoidTrading)
+                                .executes(c -> bind(c, true)))
+                        .then(Commands.literal("status").executes(c -> {
+                            var bot = EntityArgument.getPlayer(c, "bot");
+                            var session = SESSIONS.get(bot.getUUID());
+                            c.getSource().sendSuccess(() -> Component.literal(bot.getName().getString() + ": "
+                                    + (session == null ? "空闲" : session.status())
+                                    + (VillagerBindings.get(bot) == null ? "；未绑定村民" : "；绑定村民 " + VillagerBindings.get(bot).villager())), false); return 1;
+                        }))
+                        .then(Commands.literal("stop").executes(c -> {
+                            var bot = EntityArgument.getPlayer(c, "bot");
+                            var session = SESSIONS.remove(bot.getUUID());
+                            if (session != null) session.stop(bot, "玩家手动停止");
+                            c.getSource().sendSuccess(() -> Component.literal("已停止 " + bot.getName().getString()), false);
+                            return 1;
+                        })));
     }
     private static RequiredArgumentBuilder<CommandSourceStack, Identifier> tradeArguments(boolean legacy) {
         var item = Commands.argument("item", IdentifierArgument.id())
@@ -151,11 +151,9 @@ public final class FakeVoidTrading implements ModInitializer {
     private static void tick(MinecraftServer server) {
         VillagerBindings.tick(server);
         boolean enabled = com.gufeng.settings.ACMAXSettings.fakePlayerVoidTrading;
-        boolean allowNonOp = com.gufeng.settings.ACMAXSettings.fakePlayerVoidTradingAllowNonOp;
-        if (enabled != lastEnabled || allowNonOp != lastAllowNonOp) {
+        if (enabled != lastEnabled) {
             server.getPlayerList().getPlayers().forEach(server.getCommands()::sendCommands);
             lastEnabled = enabled;
-            lastAllowNonOp = allowNonOp;
         }
         var iterator = SESSIONS.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -174,8 +172,4 @@ public final class FakeVoidTrading implements ModInitializer {
         }
     }
     private static boolean lastEnabled;
-    private static boolean lastAllowNonOp;
-    static boolean commandPermissionAllowed(boolean hasOpPermission) {
-        return com.gufeng.settings.ACMAXSettings.fakePlayerVoidTradingAllowNonOp || hasOpPermission;
-    }
 }

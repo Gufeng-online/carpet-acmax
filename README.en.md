@@ -10,10 +10,10 @@ A [Carpet](https://github.com/gnembon/fabric-carpet) extension written for the A
 
 | Branch | Minecraft | Fabric API | Carpet | Mod version |
 | --- | --- | --- | --- | --- |
-| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.6 |
+| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.7 |
 | `26.1.2` | 26.1.2 | 0.155.2+26.1.2 | 26.1 | v1.2 |
 
-Both branches provide the original five rules; the two fake-player void-trading rules are available only on `main`.
+Both branches provide the original five rules; the fake-player void-trading rule is available only on `main`.
 
 ## Rules
 
@@ -28,18 +28,15 @@ All rules live in the `ACMAX` category and can be changed with the `/carpet` com
 | `cactusWrenchRailEnhancement` | `false` | Cactus wrench rail enhancement (also requires `flippinCactus`): right-click rails with a cactus to cycle through every shape without triggering block or neighbour updates. |
 | `trialSpawnerIntervalFix` | `false` | Fixes the trial spawner interval: the 160gt (8 second) interval used by the `chamber_8` and `encounter_4` structures of trial chambers becomes the normal 20gt (1 second). |
 | `fakePlayerVoidTrading` | `false` | Enable fake-player trading; turning it off stops active tasks. |
-| `fakePlayerVoidTradingAllowNonOp` | `false` | Allow everyone to use all `/voidtrade` commands when true; otherwise require OP level 2+. |
 
 ### Void-trading usage
 
 ```mcfunction
 /carpet fakePlayerVoidTrading true
-/carpet fakePlayerVoidTradingAllowNonOp true
 /carpet setDefault fakePlayerVoidTrading true
-/carpet setDefault fakePlayerVoidTradingAllowNonOp true
 ```
 
-`setDefault` persists the setting across restarts. Managing Carpet rules still requires administrative permission. With trading disabled, `status` and `stop` remain available subject to the command-access rule.
+`setDefault` persists the setting across restarts. All players can use every `/voidtrade` command when trading is enabled, including binding, listing, trading, status and stop. Managing Carpet rules still requires administrative permission. With trading disabled, `status` and `stop` remain available to all players.
 
 #### Prepare the bot and trade
 
@@ -105,7 +102,7 @@ Requires **JDK 25** (Minecraft 26.x requires it).
 ./gradlew build
 ```
 
-Output: `build/libs/carpet-acmax-addition-v1.5.6.jar` – drop it into the server `mods/` folder,
+Output: `build/libs/carpet-acmax-addition-v1.5.7.jar` – drop it into the server `mods/` folder,
 no client installation needed.
 
 ## Requirements
@@ -117,7 +114,7 @@ no client installation needed.
 
 Fake-player void trading requires Carpet 26.2 and Fabric API for Minecraft 26.2. No client-side dependencies are needed.
 
-Get `carpet-acmax-addition-v1.5.6.jar` from [Releases](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.6) and put it in the server `mods` folder, or your local Fabric instance for single-player. Clients do not need this extension. Do not install standalone `fake_player_void_trading` alongside it.
+Get `carpet-acmax-addition-v1.5.7.jar` from [Releases](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.7) and put it in the server `mods` folder, or your local Fabric instance for single-player. Clients do not need this extension. Do not install standalone `fake_player_void_trading` alongside it.
 
 [Rollback](docs/ROLLBACK.zh.md) · [Validation](VALIDATION.md)
 

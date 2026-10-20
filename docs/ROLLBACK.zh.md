@@ -26,3 +26,24 @@ git push origin main
 ```
 
 Git 回滚只恢复仓库文件，不恢复世界、玩家背包或本机 config；需要恢复存档时请使用对应世界备份。
+
+## v1.5.7 更新前的版本
+
+2026-10-20 更新前的 main 保存在 `backup/pre-v1.5.7-20261020`，提交为 `2dca863972f9a8e35400097c71d3e23cad78de11`。原来的 `v1.5.6` 发布标签和 Release 仍保留。
+
+另开工作区查看更新前代码：
+
+```sh
+git fetch origin --tags
+git worktree add ../carpet-acmax-before-v1.5.7 backup/pre-v1.5.7-20261020
+```
+
+若要让 main 恢复为此版本，在没有未提交修改的工作区执行：
+
+```sh
+git switch main
+git pull --ff-only origin main
+git restore --source=backup/pre-v1.5.7-20261020 --staged --worktree -- .
+git commit -m "Restore code before v1.5.7"
+git push origin main
+```
