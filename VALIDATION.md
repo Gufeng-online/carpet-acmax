@@ -21,3 +21,13 @@ JDK 25 重新执行 `test --offline --console=plain --rerun-tasks`：38 项测�
 推送前另行备份包含未提交源码、构建配置、说明及已有成品的完整项目：`../carpet-acmax-backups/carpet-acmax-v1.5.8-before-github-2026-10-31-3c59962d/project-v1.5.8.zip`；同目录的 `history-before-v1.5.8-push.bundle` 已通过 Git 校验，`BACKUP.json` 记录两个文件的 SHA-256。备份文件及本节为首次创建。版本记录沿用本文件，旧版 v1.5.7 验证说明保存在 `validation/v1.5.7-validation.md`。
 
 更新前远端代码的回滚标签为 `backup/pre-v1.5.8-20261031`；版本标签为 `v1.5.8`。Git 提交和标签使用已认证用户 CNTrident 的署名。本次仅推送仓库源码、说明、成品和标签，不创建 GitHub Release。
+
+## 2026-10-31：CCA 卸载设置说明（文档版本 1.0.6 → 1.0.7）
+
+Mod 版本保持 v1.5.8，源码、构建配置、JAR 和校验值保持不变。中英文 README 的装置准备部分，以及详细使用说明，补充 `/cca GatewayCannotLoadingChunks true`：未开启时，假人传送回主岛后可能在 `WAIT_GATEWAY` 等待约 13 秒，直到外岛村民区块真正卸载才交易。根目录 MODS.md 同步这项用法，工作区文档版本由 1.0.6 升级至 1.0.7。
+
+验证依据：用户实测开启该规则后等待消失；本地游戏日志记录规则名称为 `GatewayCannotLoadingChunks`，并记录其默认值已保存为 true。核对主分支中英文 README 的当前版本和下载文件名均为 v1.5.8；旧版发布、标签和回滚记录独立保留。本次为纯文档更新，检查命令大小写、中英文一致性、链接及 Git diff，不重复构建或运行测试。
+
+修改前备份：`../carpet-acmax-backups/carpet-acmax-v1.5.8-docs-1.0.6-before-cca-readme-2026-10-31-e2fa22f7/`。其中 `project-v1.5.8.zip` 保存项目源码、配置、说明和已有成品，`history-before-cca-readme.bundle` 已通过 Git 校验，`workspace-docs/` 保存修改前工作区说明，SHA-256 见 `BACKUP.json`。备份文件及本节为首次创建。更新前远端提交 `0cd6044156b673aa428e11f0d228e41235cb6f7f` 的回滚标签为 `backup/pre-cca-readme-20261031`；可恢复该标签文件后新建普通提交回滚。
+
+用户进一步确认旧版显示来自仓库右侧的 Releases / Latest，本批次同时将 Latest 更新为 v1.5.8。新增 `docs/RELEASE-v1.5.8.md` 为首次创建；使用已存在且不移动的 v1.5.8 标签及原已验证成品发布，附安装 JAR、源码 JAR 和两份 SHA-256。旧版 Release 和回滚标签保留。发布说明同步 CCA 设置和卸载等待行为。

@@ -45,6 +45,14 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 
 需要可正常运行的虚空交易装置：假人打开村民交易后，经末地折跃门到达远端，使村民区块卸载；远端提供可交互的陷阱箱和返程机构。其他玩家或区块加载器不能让目标村民区块持续加载。
 
+为避免折跃门维持村民区块加载，需要在服务端开启 CCA 的以下规则（需已安装 CCA）：
+
+```mcfunction
+/cca GatewayCannotLoadingChunks true
+```
+
+未开启时，假人传送回主岛后可能在 `WAIT_GATEWAY` 状态等待约 **13 秒**，直到外岛村民所在区块真正卸载后才会进行交易。
+
 创建假人，将它放在村民附近，为它准备交易材料、潜影盒及背包空位：
 
 ```mcfunction
@@ -157,7 +165,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 
 适用于假人虚空交易的依赖为 Carpet 26.2 和对应 Minecraft 26.2 的 Fabric API；不需要客户端前置。
 
-下载 [v1.5.8 成品](https://github.com/Gufeng-online/carpet-acmax/raw/refs/heads/main/releases/carpet-acmax-addition-v1.5.8.jar)，放入服务器 `mods`。单人游戏放入本地 Fabric 实例的 `mods`。客户端无需安装本扩展，请勿同时安装独立 `fake_player_void_trading`。
+下载 [v1.5.8 成品](https://github.com/Gufeng-online/carpet-acmax/releases/download/v1.5.8/carpet-acmax-addition-v1.5.8.jar)，放入服务器 `mods`。单人游戏放入本地 Fabric 实例的 `mods`。客户端无需安装本扩展，请勿同时安装独立 `fake_player_void_trading`。
 
 [旧版回滚](docs/ROLLBACK.zh.md) · [验证结果](VALIDATION.md)
 

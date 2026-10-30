@@ -42,6 +42,14 @@ All rules live in the `ACMAX` category and can be changed with the `/carpet` com
 
 Prepare a working void-trading device: the bot opens a villager trade, travels through an end gateway so the villager's chunk unloads, then uses a trapped chest and return mechanism at the remote end. Other players or chunk loaders must not keep the villager loaded.
 
+Enable the following CCA rule on the server (CCA must be installed) to prevent end gateways from keeping the villager's chunks loaded:
+
+```mcfunction
+/cca GatewayCannotLoadingChunks true
+```
+
+Without this setting, after teleporting back to the main End island, the bot may remain in `WAIT_GATEWAY` for about **13 seconds**. Trading starts only after the outer-island villager's chunk has actually unloaded.
+
 Create the bot near the villager and supply ingredients, shulkers and inventory space:
 
 ```mcfunction
@@ -118,7 +126,7 @@ no client installation needed.
 
 Fake-player void trading requires Carpet 26.2 and Fabric API for Minecraft 26.2. No client-side dependencies are needed.
 
-Download the [v1.5.8 JAR](https://github.com/Gufeng-online/carpet-acmax/raw/refs/heads/main/releases/carpet-acmax-addition-v1.5.8.jar) and put it in the server `mods` folder, or your local Fabric instance for single-player. Clients do not need this extension. Do not install standalone `fake_player_void_trading` alongside it.
+Download the [v1.5.8 JAR](https://github.com/Gufeng-online/carpet-acmax/releases/download/v1.5.8/carpet-acmax-addition-v1.5.8.jar) and put it in the server `mods` folder, or your local Fabric instance for single-player. Clients do not need this extension. Do not install standalone `fake_player_void_trading` alongside it.
 
 [Rollback](docs/ROLLBACK.zh.md) · [Validation](VALIDATION.md)
 
