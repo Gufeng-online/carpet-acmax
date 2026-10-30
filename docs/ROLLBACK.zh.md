@@ -1,6 +1,6 @@
 # GitHub 更新与回滚
 
-本次更新为 Carpet-ACMAX v1.5.6（Minecraft 26.2 / Java 25），包含服务端假人虚空交易。独立客户端虚空交易项目不属于本仓库。
+Carpet-ACMAX v1.5.6（Minecraft 26.2 / Java 25）首次整合服务端假人虚空交易；后续版本的回滚点记录在对应章节。独立客户端虚空交易项目不属于本仓库。
 
 更新前的 main 保存在标签 `backup/pre-v1.5.6-20261005`，提交为 `31bf26b5385c27c16988a027bfc83f82e9aceae6`。更新采用普通追加提交，保留原有完整历史。
 
@@ -47,3 +47,32 @@ git restore --source=backup/pre-v1.5.7-20261020 --staged --worktree -- .
 git commit -m "Restore code before v1.5.7"
 git push origin main
 ```
+
+## v1.5.8 更新前的版本
+
+2026-10-31 将本地 v1.5.8 同步到 GitHub 前，远端 main 为 v1.5.7，提交为 `f9d82587bf0762a0d0d9ef952dd433790facfd66`，保存为标签 `backup/pre-v1.5.8-20261031`。v1.5.8 使用普通追加提交，旧版发布标签、Release 和成品均保留。
+
+另开工作区查看更新前代码：
+
+```sh
+git fetch origin --tags
+git worktree add ../carpet-acmax-before-v1.5.8 backup/pre-v1.5.8-20261031
+```
+
+在没有未提交修改的工作区，撤销 v1.5.8 提交并保留完整历史：
+
+```sh
+git switch main
+git pull --ff-only origin main
+git revert v1.5.8
+git push origin main
+```
+
+也可从备份标签恢复文件后创建普通提交：
+
+```sh
+git restore --source=backup/pre-v1.5.8-20261031 --staged --worktree -- .
+git commit -m "Restore code before v1.5.8"
+```
+
+本地推送前备份包含未提交源码、构建配置、说明和已有成品：`../carpet-acmax-backups/carpet-acmax-v1.5.8-before-github-2026-10-31-3c59962d/project-v1.5.8.zip`；同目录的 `history-before-v1.5.8-push.bundle` 保留 Git 历史，`BACKUP.json` 记录 SHA-256。备份文件为首次创建。

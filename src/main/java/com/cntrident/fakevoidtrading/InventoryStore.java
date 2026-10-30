@@ -13,10 +13,17 @@ import java.util.List;
 /** All operations run on copies. Failed plans never modify the player's inventory. */
 public final class InventoryStore {
     private final List<ItemStack> items;
+    private int preferredOutputSlot = -1;
     public InventoryStore(Inventory inventory) {
         items = new ArrayList<>();
         for (int i = 0; i < 36; i++) items.add(inventory.getItem(i).copy());
     }
+    InventoryStore(Inventory inventory, int preferredOutputSlot) {
+        this(inventory);
+        this.preferredOutputSlot = preferredOutputSlot;
+    }
+    int preferredOutputSlot() { return preferredOutputSlot; }
+    int directCount(ItemStack template) { return count(items, template); }
     InventoryStore(List<ItemStack> source) {
         items = source.stream().map(ItemStack::copy).collect(java.util.stream.Collectors.toCollection(ArrayList::new));
     }
@@ -61,19 +68,41 @@ public final class InventoryStore {
         return moved;
     }
     int prepareOutput(ItemStack output) {
-        if (items.stream().filter(InventoryStore::usableBox).anyMatch(InventoryStore::emptyBox)) return 0;
-        if (expandOneBox(InventoryStore::emptyBox) > 0) return 1;
-        if (items.stream().filter(InventoryStore::usableBox)
-                .anyMatch(box -> capacity(contents(box), output) > 0)) return 0;
-        return expandOneBox(box -> capacity(contents(box), output) > 0);
+        if (output.isEmpty() || !output.getItem().canFitInsideContainerItems()) return 0;
+        if (preferredOutputSlot >= 0 && preferredOutputSlot < items.size()) {
+            var box = items.get(preferredOutputSlot);
+            if (usableBox(box) && capacity(contents(box), output) > 0) return 0;
+        }
+        preferredOutputSlot = findOutputBox(output, true);
+        if (preferredOutputSlot >= 0) return 0;
+        if (expandOneBox(InventoryStore::emptyBox) > 0) {
+            preferredOutputSlot = findOutputBox(output, true);
+            return 1;
+        }
+        preferredOutputSlot = findOutputBox(output, false);
+        if (preferredOutputSlot >= 0) return 0;
+        if (expandOneBox(box -> capacity(contents(box), output) > 0) > 0) {
+            preferredOutputSlot = findOutputBox(output, false);
+            return 1;
+        }
+        return 0;
+    }
+    private int findOutputBox(ItemStack output, boolean emptyOnly) {
+        int best = -1, priority = Integer.MAX_VALUE;
+        for (int i = 0; i < items.size(); i++) {
+            var box = items.get(i);
+            if (!usableBox(box)) continue;
+            var inside = contents(box);
+            boolean empty = inside.stream().allMatch(ItemStack::isEmpty);
+            if (emptyOnly && !empty || capacity(inside, output) <= 0) continue;
+            int score = empty ? 0 : inside.stream().anyMatch(item -> same(item, output)
+                    && item.getCount() < item.getMaxStackSize()) ? 1 : 2;
+            if (score < priority) { best = i; priority = score; }
+        }
+        return best;
     }
     private static boolean emptyBox(ItemStack box) {
         return contents(box).stream().allMatch(ItemStack::isEmpty);
-    }
-    private List<ItemStack> outputBoxes() {
-        // Sort references, not inventory slots: box positions remain unchanged.
-        return items.stream().filter(InventoryStore::usableBox)
-                .sorted(java.util.Comparator.comparingInt(box -> emptyBox(box) ? 0 : 1)).toList();
     }
     private static NonNullList<ItemStack> contents(ItemStack box) {
         var result = NonNullList.withSize(27, ItemStack.EMPTY);
@@ -111,25 +140,34 @@ public final class InventoryStore {
         for (var box : items) if (usableBox(box)) total += count(contents(box), template);
         return total;
     }
-    public boolean storeInBoxes(ItemStack template, int count) {
-        int capacity = 0;
-        for (ItemStack box : items) if (usableBox(box)) capacity += capacity(contents(box), template);
-        if (capacity < count || count(items, template) < count) return false;
-        remove(items, template, count);
-        int left = count;
-        for (ItemStack box : outputBoxes()) {
-            var inside = contents(box);
-            left = insert(inside, template, left);
-            box.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(inside));
-            if (left == 0) return true;
-        }
-        return false;
+    public boolean storeInBoxes(ItemStack template, int requested) {
+        if (requested < 0 || count(items, template) < requested) return false;
+        var plan = new InventoryStore(items);
+        plan.preferredOutputSlot = preferredOutputSlot;
+        if (plan.storeAvailableInBoxes(template, requested) != requested) return false;
+        for (int i = 0; i < items.size(); i++) items.set(i, plan.items.get(i));
+        preferredOutputSlot = plan.preferredOutputSlot;
+        return true;
     }
     int storeAvailableInBoxes(ItemStack template, int requested) {
-        int room = 0;
-        for (var box : items) if (usableBox(box)) room += capacity(contents(box), template);
-        int stored = Math.min(requested, Math.min(room, count(items, template)));
-        return stored > 0 && storeInBoxes(template, stored) ? stored : 0;
+        if (requested <= 0 || template.isEmpty() || !template.getItem().canFitInsideContainerItems()) return 0;
+        int left = Math.min(requested, count(items, template));
+        int stored = 0;
+        while (left > 0) {
+            // Select or split only while there are actual items left to store.
+            prepareOutput(template);
+            if (preferredOutputSlot < 0) break;
+            var box = items.get(preferredOutputSlot);
+            var inside = contents(box);
+            int moved = Math.min(left, capacity(inside, template));
+            if (moved <= 0) break;
+            remove(items, template, moved);
+            insert(inside, template, moved);
+            box.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(inside));
+            stored += moved;
+            left -= moved;
+        }
+        return stored;
     }
     static int count(List<ItemStack> slots, ItemStack template) {
         return slots.stream().filter(s -> same(s, template)).mapToInt(ItemStack::getCount).sum();

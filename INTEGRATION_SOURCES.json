@@ -4,7 +4,7 @@
     "branch": "main",
     "commit": "31bf26b5385c27c16988a027bfc83f82e9aceae6"
   },
-  "integration_version": "v1.5.7",
+  "integration_version": "v1.5.8",
   "sources": [
     {
       "directory": "fake player void trading",
@@ -26,11 +26,16 @@
       }
     }
   ],
-  "previous_version_backup": "../carpet-acmax-backups/carpet-acmax-before-open-commands-20261019-225212.zip",
+  "previous_version_backup": "../carpet-acmax-backups/carpet-acmax-before-client-storage-sync-20261023-234306.zip",
   "chinese_names_source": {
     "minecraft": "26.2",
     "asset": "minecraft/lang/zh_cn.json",
     "asset_sha1": "f87510f4509890eaf176e0de1430f6bb326a6800",
     "keys": "item.minecraft.*, block.minecraft.*, enchantment.minecraft.*"
+  },
+  "client_logic_sync": {
+    "project": "auto void trading",
+    "version": "3.1.16",
+    "scope": "server-side storage, actual-price offer selection and return behavior; no client dependencies added"
   }
 }

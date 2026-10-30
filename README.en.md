@@ -10,7 +10,7 @@ A [Carpet](https://github.com/gnembon/fabric-carpet) extension written for the A
 
 | Branch | Minecraft | Fabric API | Carpet | Mod version |
 | --- | --- | --- | --- | --- |
-| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.7 |
+| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.8 |
 | `26.1.2` | 26.1.2 | 0.155.2+26.1.2 | 26.1 | v1.2 |
 
 Both branches provide the original five rules; the fake-player void-trading rule is available only on `main`.
@@ -66,7 +66,11 @@ Offer numbers start at one. The item ID is optional and must match the selected 
 
 When materials cannot meet the target, the bot warns and continues every affordable trade, including the final smaller batch. Materials insufficient for one whole trade remain in inventory. Each trade produces its full quoted output, so the count target may be slightly exceeded.
 
-Outputs prefer empty shulkers. Stacked boxes split one at a time as needed. When boxes are absent or full, overflow stays in the bot inventory and trading continues. Space stops trading only when the next output fits neither inventory nor shulkers. Rebind and restart after bot logout or server restart. Menu problems, changed offers and device timeouts report a stop reason.
+New destinations prefer completely empty shulkers. The selected box is reused across rounds within the same task until it cannot accept any more outputs. Restarting a task selects a new destination and prefers empty boxes again. Stacked boxes split one at a time only when another box is needed; no unused box is opened in advance.
+
+Splitting a stacked box requires at least two free slots in the normal inventory. With fewer free slots, the bot tries existing usable boxes and leaves any overflow in inventory. Trading stops when the next complete output cannot fit after attempting storage. Leave enough space before trading: if outputs occupy the slots needed to split a box, the task can stop even while unused stacked empty boxes remain.
+
+Storage retries matching overflow from previous rounds as well. After reaching a round or item-count goal, the bot finishes storage, waits for any remaining cooldown and returns before ending the task. Rebind and restart after bot logout or server restart. Menu problems, changed offers and device timeouts report a stop reason.
 
 Legacy commands:
 
@@ -102,7 +106,7 @@ Requires **JDK 25** (Minecraft 26.x requires it).
 ./gradlew build
 ```
 
-Output: `build/libs/carpet-acmax-addition-v1.5.7.jar` – drop it into the server `mods/` folder,
+Output: `build/libs/carpet-acmax-addition-v1.5.8.jar` – drop it into the server `mods/` folder,
 no client installation needed.
 
 ## Requirements
@@ -114,7 +118,7 @@ no client installation needed.
 
 Fake-player void trading requires Carpet 26.2 and Fabric API for Minecraft 26.2. No client-side dependencies are needed.
 
-Get `carpet-acmax-addition-v1.5.7.jar` from [Releases](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.7) and put it in the server `mods` folder, or your local Fabric instance for single-player. Clients do not need this extension. Do not install standalone `fake_player_void_trading` alongside it.
+Download the [v1.5.8 JAR](https://github.com/Gufeng-online/carpet-acmax/raw/refs/heads/main/releases/carpet-acmax-addition-v1.5.8.jar) and put it in the server `mods` folder, or your local Fabric instance for single-player. Clients do not need this extension. Do not install standalone `fake_player_void_trading` alongside it.
 
 [Rollback](docs/ROLLBACK.zh.md) · [Validation](VALIDATION.md)
 
