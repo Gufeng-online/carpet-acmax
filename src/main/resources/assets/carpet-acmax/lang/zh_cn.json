@@ -1,4 +1,6 @@
 {
+  "carpet.rule.voidSkylightFix.name": "修复虚空天空光照",
+  "carpet.rule.voidSkylightFix.desc": "仅将刷怪空气层 Y=-63 的天空状态和天光视为遮挡；Y=-64 与 Y=-62 及以上不受影响。默认关闭。",
   "carpet.rule.endGatewayCooldown.name": "禁用折跃门传送冷却",
   "carpet.rule.endGatewayCooldown.desc": "禁用末地折跃门传送之间的2秒冷却。开启以允许无限制传送（无冷却）。",
   "carpet.rule.itemEntityAlarm.name": "掉落物堆积警报",

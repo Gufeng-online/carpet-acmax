@@ -1,4 +1,6 @@
 {
+  "carpet.rule.voidSkylightFix.name": "Void Skylight Fix",
+  "carpet.rule.voidSkylightFix.desc": "Treats sky state and skylight as covered only at spawn-air layer Y=-63; Y=-64 and Y=-62 and above are unchanged. Disabled by default.",
   "carpet.rule.endGatewayCooldown.name": "End Gateway Cooldown",
   "carpet.rule.endGatewayCooldown.desc": "Disables the 2-second cooldown between end gateway teleports. Enable to allow unlimited teleportation without cooldown.",
   "carpet.rule.itemEntityAlarm.name": "Item Entity Alarm",

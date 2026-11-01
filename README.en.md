@@ -10,7 +10,7 @@ A [Carpet](https://github.com/gnembon/fabric-carpet) extension written for the A
 
 | Branch | Minecraft | Fabric API | Carpet | Mod version |
 | --- | --- | --- | --- | --- |
-| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.7 |
+| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.15 |
 | `26.1.2` | 26.1.2 | 0.155.2+26.1.2 | 26.1 | v1.2 |
 
 Both branches provide the original five rules; the fake-player void-trading rule is available only on `main`.
@@ -22,6 +22,7 @@ All rules live in the `ACMAX` category and can be changed with the `/carpet` com
 
 | Rule | Default | Description |
 | --- | --- | --- |
+| `voidSkylightFix` | `false` | Treats sky state and skylight as covered only at spawn-air layer `Y=-63`; `Y=-64` and `Y=-62` and above keep vanilla behavior. |
 | `endGatewayCooldown` | `false` | Disables the 2-second cooldown between end gateway teleports, allowing unlimited teleporting. |
 | `itemEntityAlarm` | `0` | Item pile-up alarm: alerts everyone in chat with coordinates and stack count when a single chunk reaches the threshold. Presets are `1000 / 2000 / 4000 / 6000`, any custom positive integer works, and `0` disables the alarm. |
 | `railForceStatePlacement` | `false` | Forced rail state placement: only affects rails placed with Easy Place (Litematica protocol V3). Rails keep the shape from the schematic (floating / unsupported rails included) and the placement does not reshape the surrounding rails. Everything returns to vanilla behaviour as soon as the placement transaction ends, so redstone reshaping and unsupported rails dropping are completely unaffected. |
@@ -102,7 +103,7 @@ Requires **JDK 25** (Minecraft 26.x requires it).
 ./gradlew build
 ```
 
-Output: `build/libs/carpet-acmax-addition-v1.5.7.jar` – drop it into the server `mods/` folder,
+Output: `build/libs/carpet-acmax-addition-v1.5.15.jar` – drop it into the server `mods/` folder,
 no client installation needed.
 
 ## Requirements
@@ -114,7 +115,7 @@ no client installation needed.
 
 Fake-player void trading requires Carpet 26.2 and Fabric API for Minecraft 26.2. No client-side dependencies are needed.
 
-Get `carpet-acmax-addition-v1.5.7.jar` from [Releases](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.7) and put it in the server `mods` folder, or your local Fabric instance for single-player. Clients do not need this extension. Do not install standalone `fake_player_void_trading` alongside it.
+Put `carpet-acmax-addition-v1.5.15.jar` in the server `mods` folder, or your local Fabric instance for single-player. Clients do not need this extension. Do not install standalone `fake_player_void_trading` alongside it.
 
 [Rollback](docs/ROLLBACK.zh.md) · [Validation](VALIDATION.md)
 

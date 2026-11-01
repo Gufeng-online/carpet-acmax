@@ -6,6 +6,13 @@ import carpet.api.settings.RuleCategory;
 public class ACMAXSettings {
     public static final String ACMAX = "ACMAX";
 
+    @Rule(
+            categories = {ACMAX, RuleCategory.BUGFIX},
+            options = {"true", "false"},
+            strict = false
+    )
+    public static boolean voidSkylightFix = false;
+
     @Rule(categories = {ACMAX, RuleCategory.FEATURE, RuleCategory.SURVIVAL}, options = {"true", "false"}, strict = false)
     public static boolean fakePlayerVoidTrading = false;
 

@@ -9,7 +9,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 
 | 分支 | Minecraft | Fabric API | Carpet 依赖 | 模组版本 |
 | --- | --- | --- | --- | --- |
-| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.7 |
+| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.15 |
 | `26.1.2` | 26.1.2 | 0.155.2+26.1.2 | 26.1 | v1.2 |
 
 两个分支均提供原有五项规则；假人虚空交易规则仅适用于 `main` 分支。
@@ -20,6 +20,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 
 | 规则 | 默认值 | 说明 |
 | --- | --- | --- |
+| `voidSkylightFix` | `false` | 仅将刷怪空气层 `Y=-63` 的天空状态和天光视为遮挡；`Y=-64` 与 `Y=-62` 及以上完全保持原版。 |
 | `endGatewayCooldown` | `false` | 禁用末地折跃门传送之间的 2 秒冷却，允许无限制连续传送。 |
 | `itemEntityAlarm` | `0` | 掉落物堆积警报：某一区块内的掉落物堆数达到阈值时向全服通报坐标与数量。预设档位 `1000 / 2000 / 4000 / 6000`，也可填任意正整数，`0` 为关闭。 |
 | `railForceStatePlacement` | `false` | 铁轨强制状态放置：只对「轻松放置」（Litematica 协议 V3）放置的铁轨生效。铁轨按投影形状放置（含悬空、无支撑的铁轨），且本次放置不会让周围铁轨变形。事务结束后立即恢复原版行为，红石换向、无支撑掉落等特性完全不受影响。 |
@@ -142,7 +143,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 ./gradlew build
 ```
 
-产物：`build/libs/carpet-acmax-addition-v1.5.7.jar`（放进服务端 `mods/` 即可，客户端无需安装）。
+产物：`build/libs/carpet-acmax-addition-v1.5.15.jar`（放进服务端 `mods/` 即可，客户端无需安装）。
 
 ## 运行依赖
 
@@ -153,7 +154,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 
 适用于假人虚空交易的依赖为 Carpet 26.2 和对应 Minecraft 26.2 的 Fabric API；不需要客户端前置。
 
-从 [Releases](https://github.com/Gufeng-online/carpet-acmax/releases/tag/v1.5.7) 下载 `carpet-acmax-addition-v1.5.7.jar`，放入服务器 `mods`。单人游戏放入本地 Fabric 实例的 `mods`。客户端无需安装本扩展，请勿同时安装独立 `fake_player_void_trading`。
+构建产物为 `carpet-acmax-addition-v1.5.15.jar`，放入服务器 `mods`。单人游戏放入本地 Fabric 实例的 `mods`。客户端无需安装本扩展，请勿同时安装独立 `fake_player_void_trading`。
 
 [旧版回滚](docs/ROLLBACK.zh.md) · [验证结果](VALIDATION.md)
 
