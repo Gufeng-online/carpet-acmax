@@ -1,9 +1,10 @@
-## Carpet-ACMAX v1.5.15
+## Carpet-ACMAX v1.5.9
 
 适用于 **Minecraft 26.2 / Fabric / Java 25**。需要 Fabric Loader 0.19.3+、Carpet 26.2 和对应 Fabric API。
 
 ### 更新内容
 
+- 合并上游 v1.5.8：假人虚空交易在多个轮次之间复用潜影盒。
 - 仅将刷怪空气层 `Y=-63` 的天空状态和天光视为遮挡。
 - `Y=-64` 与 `Y=-62` 及以上完全保持原版。
 - 所有光照包在最终序列化前再次清除 `Y=-63`，覆盖方块放置后的增量光照更新。
@@ -15,5 +16,5 @@
 
 ### 附件
 
-- `carpet-acmax-addition-v1.5.15.jar`：安装文件。
-- `carpet-acmax-addition-v1.5.15-sources.jar`：源码包，无需放入 mods。
+- `carpet-acmax-addition-v1.5.9.jar`：安装文件。
+- `carpet-acmax-addition-v1.5.9-sources.jar`：源码包，无需放入 mods。

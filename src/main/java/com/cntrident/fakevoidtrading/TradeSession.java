@@ -46,6 +46,7 @@ final class TradeSession {
     private Vec3 previousPosition;
     private int age, deadline = ServerConfig.get.phaseTimeoutTicks, armedUntil = -1, delayUntil;
     private int completed, trades, pending;
+    private int preferredOutputSlot = -1;
     private boolean jumped;
     private boolean materialsExhausted;
     private boolean resourceNoticeSent;
@@ -74,9 +75,9 @@ final class TradeSession {
     private String progress() { return countMode ? "新成交产物 " + produced + "/" + requested + " 件；完成 " + completed + " 轮"
             : "完成 " + completed + "/" + requested + " 轮；新成交产物 " + produced + " 件"; }
     private final ReturnGate returnGate = new ReturnGate();
-    private void expandBoxes(ServerPlayer bot, boolean forOutput) {
+    private void expandPaymentBoxes(ServerPlayer bot) {
         var inventory = new InventoryStore(bot.getInventory());
-        int expanded = forOutput ? inventory.prepareOutput(result) : inventory.preparePayment(costA, costB);
+        int expanded = inventory.preparePayment(costA, costB);
         if (expanded > 0) {
             inventory.commit(bot.getInventory());
             owner.sendSuccess(() -> Component.literal("已展开 " + expanded + " 个堆叠潜影盒，保留原有组件和内容"), false);
@@ -119,21 +120,12 @@ final class TradeSession {
             case TRADE -> { if (!trade(bot)) return false; }
             case STORE -> {
                 closeOwned(bot);
-                if (pending > 0) {
-                    expandBoxes(bot, true);
-                    var plan = new InventoryStore(bot.getInventory());
-                    int stored = plan.storeAvailableInBoxes(result, pending);
-                    plan.commit(bot.getInventory());
-                    pending -= stored;
-                    // Use the available single box before requesting another on the next tick.
-                    if (pending > 0 && new InventoryStore(bot.getInventory()).prepareOutput(result) > 0) break;
-                    if (pending > 0) owner.sendSuccess(() -> Component.literal("潜影盒容量不足，剩余 "
-                            + pending + " 件保留在假人背包；继续流程").withStyle(net.minecraft.ChatFormatting.YELLOW), false);
-                    pending = 0;
-                }
+                storeOutputs(bot);
+                int remaining = new InventoryStore(bot.getInventory()).directCount(result);
+                if (remaining > 0) owner.sendSuccess(() -> Component.literal("潜影盒容量不足，剩余 "
+                        + remaining + " 件保留在假人背包；继续流程").withStyle(net.minecraft.ChatFormatting.YELLOW), false);
+                pending = 0;
                 completed++;
-                if (goalReached(countMode, completed, produced, requested) && !materialsExhausted)
-                    return stop(bot, "已达到交易目标");
                 returnGate.finishStorage();
                 enter(State.CHEST, ServerConfig.get.trappedChestSearchTicks + returnGate.remaining(age));
             }
@@ -145,6 +137,8 @@ final class TradeSession {
                 Entity loaded = bot.level().getEntity(villagerId);
                 if (loaded instanceof Villager next && canReach(bot, next.getEyePosition())) {
                     if (materialsExhausted) return stop(bot, "现有材料已完成所有可支付交易，产物已收纳并完成返程");
+                    if (goalReached(countMode, completed, produced, requested))
+                        return stop(bot, "已达到交易目标，产物已收纳并完成返程");
                     villager = next; enter(State.SEEK, ServerConfig.get.phaseTimeoutTicks);
                 }
             }
@@ -163,16 +157,17 @@ final class TradeSession {
         if (villager == null) return;
         int best = -1;
         var offers = villager.getOffers();
+        var pricedOffers = TradePrices.forBot(villager, bot);
         if (selectedOffer != null && (selectedOffer.index() >= offers.size()
                 || !selectedOffer.matches(offers.get(selectedOffer.index())))) {
             stop(bot, "绑定报价发生变化，请重新执行 trades 并选择报价"); return;
         }
         for (int i = 0; i < offers.size(); i++) {
-            var candidate = offers.get(i);
+            var candidate = pricedOffers.get(i);
             if (selectedOffer != null && i != selectedOffer.index()) continue;
             if (!matches(candidate)) continue;
-            if (best == -1 || candidate.getCostA().is(Items.EMERALD) && offers.get(best).getCostA().is(Items.EMERALD)
-                    && compare(candidate, offers.get(best)) < 0) best = i;
+            if (best == -1 || candidate.getCostA().is(Items.EMERALD) && pricedOffers.get(best).getCostA().is(Items.EMERALD)
+                    && compare(candidate, pricedOffers.get(best)) < 0) best = i;
         }
         if (best == -1) { stop(bot, "村民没有未售罄的目标报价"); return; }
         offerIndex = best; offer = offers.get(best);
@@ -182,7 +177,7 @@ final class TradeSession {
         }
         ownedMenu = menu; villagerId = villager.getUUID();
         costA = offer.getCostA().copy(); costB = offer.getCostB().copy(); result = offer.getResult().copy();
-        expandBoxes(bot, false);
+        expandPaymentBoxes(bot);
         int affordable = new InventoryStore(bot.getInventory()).affordableTrades(costA, costB);
         if (!resourceNoticeSent) {
             var warning = countMode ? countWarning(requested, result.getCount(), affordable)
@@ -237,20 +232,14 @@ final class TradeSession {
         if (offer.isOutOfStock()) { enter(State.STORE, 200); return true; }
         if (!menu.getSlot(0).getItem().isEmpty() || !menu.getSlot(1).getItem().isEmpty())
             return stop(bot, "交易输入槽出现了非预期物品");
-        expandBoxes(bot, false);
+        expandPaymentBoxes(bot);
         var plan = new InventoryStore(bot.getInventory());
         if (!canPay(plan, costA, costB)) {
             materialsExhausted = true; enter(State.STORE, 200); return true;
         }
-        if (!plan.canReceive(result) && pending > 0) {
-            expandBoxes(bot, true);
-            var storage = new InventoryStore(bot.getInventory());
-            int stored = storage.storeAvailableInBoxes(result, pending);
-            if (stored > 0) {
-                storage.commit(bot.getInventory()); pending -= stored;
-                plan = new InventoryStore(bot.getInventory());
-                if (!canPay(plan, costA, costB)) { materialsExhausted = true; enter(State.STORE, 200); return true; }
-            }
+        if (!plan.canReceive(result) && storeOutputs(bot) > 0) {
+            plan = new InventoryStore(bot.getInventory());
+            if (!canPay(plan, costA, costB)) { materialsExhausted = true; enter(State.STORE, 200); return true; }
         }
         if (!plan.canReceive(result)) return stop(bot, "假人背包和潜影盒均无法接收下一笔完整产物；已有产物保留");
         plan.commit(bot.getInventory());
@@ -263,6 +252,17 @@ final class TradeSession {
         pending += result.getCount(); trades++; produced += result.getCount(); menu.broadcastChanges();
         if (countMode && goalReached(true, completed, produced, requested)) enter(State.STORE, 200);
         return true;
+    }
+    private int storeOutputs(ServerPlayer bot) {
+        var storage = new InventoryStore(bot.getInventory(), preferredOutputSlot);
+        // Include previous rounds' overflow, just as the client scans all matching inventory slots.
+        int stored = storage.storeAvailableInBoxes(result, storage.directCount(result));
+        if (stored > 0) {
+            storage.commit(bot.getInventory());
+            preferredOutputSlot = storage.preferredOutputSlot();
+            pending = Math.max(0, pending - stored);
+        }
+        return stored;
     }
     static boolean canPay(InventoryStore plan, ItemStack first, ItemStack second) {
         return plan.take(first) && plan.take(second);

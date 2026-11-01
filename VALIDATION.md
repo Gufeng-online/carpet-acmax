@@ -1,13 +1,33 @@
-# Carpet-ACMAX v1.5.7
+# Carpet-ACMAX v1.5.8
 
-移除 fakePlayerVoidTradingAllowNonOp 规则、翻译及 OP 权限限制。fakePlayerVoidTrading 默认仍关闭，开启后所有玩家可使用绑定、列表、start、offer cycle/count 和旧交易形式。关闭时交易任务停止，status/stop 仍向所有玩家开放。修改 Carpet 规则仍沿用 Carpet 管理权限。
+假人交易同步独立客户端 Auto Void Trading 3.1.16 的收纳行为：新目标优先空盒，跨轮持续使用已选盒子，装不下剩余产物才换盒；只有仍有待存物品时才按需展开一个堆叠盒。收纳扫描全部同组件产物，包括上一轮留在背包的部分。空盒或容量不足时保留背包并继续流程。保持盒子数量、物品数量和组件，禁止将潜影盒产物嵌套放入另一潜影盒。
 
-2026-10-19 使用 JDK 25 执行 `test --tests '*TradeChoicesTest' build`，15 项相关测试通过，构建成功。测试使用 NO_PERMISSIONS 命令源检查实际注册命令树：开启后可访问各功能；关闭后禁止绑定、列表和启动交易，允许 status/stop；再次开启恢复访问。测试也确认删除的规则字段不存在。未进行真实非 OP 客户端游戏内验证。
+旧式未指定 offer 的交易按假人实际折扣价格选择匹配报价；明确指定 offer 仍使用所选报价。达到轮数/数量目标后，也会完成收纳、剩余冷却及返程，再结束任务。默认 2 秒可配置冷却、材料不足正常结束及双材料交易保留。指令对所有玩家开放的行为未改变。
 
-JAR 检查确认规则字段、权限判断引用及中英文说明已删除，版本为 v1.5.7。成品与源码 JAR 和 SHA-256 在 releases。日志 validation/v1.5.7-build.log。
+2026-10-23 使用 JDK 25 执行 `test build`，38 项测试全部通过。新增回归覆盖：连续三批各 12 件同组件不可堆叠产物，第一盒依次收纳 12、24、27 件，第二盒收纳剩余 9 件；仅展开两个盒子，64 个盒子总数与产物组件保持不变；当前部分填充盒优先于另一个空盒；无产物时不拆盒；拆盒空位不足时先使用已有盒并保留溢出；要求完整收纳失败时不提交部分移动；禁止潜影盒嵌套。已有付款、价格、命令权限及返程计时测试通过。
 
-修改前备份：../carpet-acmax-backups/carpet-acmax-before-open-commands-20261019-225212.zip，附 SHA-256。旧版成品仍保留在 releases。世界配置中如有 fakePlayerVoidTradingAllowNonOp 的旧保存项，该规则已失效，可删除。
+测试过程中修正了一处测试夹具的组件匹配（显式空容器组件与默认空组件不同）；最终构建成功，日志在 validation/v1.5.8-build.log。没有新增客户端依赖，也没有修改独立客户端项目。本次未进行真实游戏内装置、假人跨轮交互及最终返程的端到端验证。
 
-## 2026-10-20 发布前验证
+修改前备份：../carpet-acmax-backups/carpet-acmax-before-client-storage-sync-20261023-234306.zip，附 SHA-256。旧版 JAR 保留；v1.5.8 成品、源码 JAR 及 SHA-256 位于 releases。2026-10-23 构建时尚未推送或发布 GitHub。
 
-JDK 25 执行 `test build` 成功，全部 32 项测试通过，失败和错误均为 0。成品和源码包已与构建输出核对并生成 SHA-256。日志保留在本地 `validation/v1.5.7-release-build.log`。本次整理提交与发布说明，没有额外修改运行逻辑；真实非 OP 客户端游戏内验证仍未完成。GitHub 更新前的回滚标签为 `backup/pre-v1.5.7-20261020`。
+## v1.5.7 → v1.5.8：2026-10-31 GitHub 同步
+
+将已经完成的本地 v1.5.8 同步到 `Gufeng-online/carpet-acmax` 的 `main`，沿用 v1.5.8，不另增功能版本。原版本为 v1.5.7，远端原提交为 `f9d82587bf0762a0d0d9ef952dd433790facfd66`。优化和更新包括首次优先全空盒、同一任务跨轮持续填充当前盒、按需逐个展开堆叠盒、重试背包同组件溢出产物、按实际折扣选价，以及达到目标后完成收纳与返程。交易源码沿用本地已经完成的改动；本次补充中英文使用边界、成品下载入口和回滚说明。
+
+JDK 25 重新执行 `test --offline --console=plain --rerun-tasks`：38 项测试全部通过，失败和错误为 0；随后执行 `build --offline --console=plain` 成功，复用相同源码对应的测试结果。构建日志：`validation/v1.5.8-github-push-20261031.log`。安装 JAR、源码 JAR、Minecraft 26.2 / Java 25 版本声明和对应 SHA-256 均核对。未进行真实游戏装置、假人菜单及返程的端到端验证。
+
+额外库存模拟确认：同一任务每次收纳 1 本附魔书、连续 30 次时，只使用 2 个盒子，分别为 27 本和 3 本。每轮 12 本、连续 3 轮时同样持续填盒，结果为 27 本和 9 本。重新启动任务会重置选盒记录。拆堆叠盒仍要求至少两个普通背包空槽：若产物先占用拆盒所需空位，即使仍有堆叠空盒也可能提前停止；这是保留的既有边界，未在 v1.5.8 修复。
+
+推送前另行备份包含未提交源码、构建配置、说明及已有成品的完整项目：`../carpet-acmax-backups/carpet-acmax-v1.5.8-before-github-2026-10-31-3c59962d/project-v1.5.8.zip`；同目录的 `history-before-v1.5.8-push.bundle` 已通过 Git 校验，`BACKUP.json` 记录两个文件的 SHA-256。备份文件及本节为首次创建。版本记录沿用本文件，旧版 v1.5.7 验证说明保存在 `validation/v1.5.7-validation.md`。
+
+更新前远端代码的回滚标签为 `backup/pre-v1.5.8-20261031`；版本标签为 `v1.5.8`。Git 提交和标签使用已认证用户 CNTrident 的署名。本次仅推送仓库源码、说明、成品和标签，不创建 GitHub Release。
+
+## 2026-10-31：CCA 卸载设置说明（文档版本 1.0.6 → 1.0.7）
+
+Mod 版本保持 v1.5.8，源码、构建配置、JAR 和校验值保持不变。中英文 README 的装置准备部分，以及详细使用说明，补充 `/cca GatewayCannotLoadingChunks true`：未开启时，假人传送回主岛后可能在 `WAIT_GATEWAY` 等待约 13 秒，直到外岛村民区块真正卸载才交易。根目录 MODS.md 同步这项用法，工作区文档版本由 1.0.6 升级至 1.0.7。
+
+验证依据：用户实测开启该规则后等待消失；本地游戏日志记录规则名称为 `GatewayCannotLoadingChunks`，并记录其默认值已保存为 true。核对主分支中英文 README 的当前版本和下载文件名均为 v1.5.8；旧版发布、标签和回滚记录独立保留。本次为纯文档更新，检查命令大小写、中英文一致性、链接及 Git diff，不重复构建或运行测试。
+
+修改前备份：`../carpet-acmax-backups/carpet-acmax-v1.5.8-docs-1.0.6-before-cca-readme-2026-10-31-e2fa22f7/`。其中 `project-v1.5.8.zip` 保存项目源码、配置、说明和已有成品，`history-before-cca-readme.bundle` 已通过 Git 校验，`workspace-docs/` 保存修改前工作区说明，SHA-256 见 `BACKUP.json`。备份文件及本节为首次创建。更新前远端提交 `0cd6044156b673aa428e11f0d228e41235cb6f7f` 的回滚标签为 `backup/pre-cca-readme-20261031`；可恢复该标签文件后新建普通提交回滚。
+
+用户进一步确认旧版显示来自仓库右侧的 Releases / Latest，本批次同时将 Latest 更新为 v1.5.8。新增 `docs/RELEASE-v1.5.8.md` 为首次创建；使用已存在且不移动的 v1.5.8 标签及原已验证成品发布，附安装 JAR、源码 JAR 和两份 SHA-256。旧版 Release 和回滚标签保留。发布说明同步 CCA 设置和卸载等待行为。

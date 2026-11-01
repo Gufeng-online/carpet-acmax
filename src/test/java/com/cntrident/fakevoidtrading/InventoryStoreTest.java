@@ -38,9 +38,113 @@ class InventoryStoreTest {
         assertEquals(1, plan.prepareOutput(new ItemStack(Items.DIAMOND)));
         assertEquals(0, plan.prepareOutput(new ItemStack(Items.DIAMOND)));
         assertEquals(64, plan.storeAvailableInBoxes(new ItemStack(Items.DIAMOND), 64));
-        assertEquals(1, plan.prepareOutput(new ItemStack(Items.DIAMOND)));
+        assertEquals(0, plan.prepareOutput(new ItemStack(Items.DIAMOND)));
         assertEquals(0, plan.prepareOutput(new ItemStack(Items.DIAMOND)));
         assertEquals(64, stack.getCount());
+    }
+    private static net.minecraft.world.entity.player.Inventory snapshot(InventoryStore plan) {
+        var inventory = new net.minecraft.world.entity.player.Inventory(null, new net.minecraft.world.entity.EntityEquipment());
+        plan.commit(inventory);
+        return inventory;
+    }
+    private static void addSingles(net.minecraft.world.entity.player.Inventory inventory, ItemStack template, int count) {
+        for (int i = 0; i < 36 && count > 0; i++) if (inventory.getItem(i).isEmpty()) {
+            inventory.setItem(i, template.copyWithCount(1)); count--;
+        }
+        assertEquals(0, count);
+    }
+    private static int boxedCount(net.minecraft.world.entity.player.Inventory inventory, ItemStack template) {
+        int count = 0;
+        for (int i = 0; i < 36; i++) {
+            var box = inventory.getItem(i);
+            if (!InventoryStore.expandableBox(box)) continue;
+            count += box.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyItemCopyStream()
+                    .filter(item -> ItemStack.isSameItemSameComponents(item, template))
+                    .mapToInt(item -> item.getCount() * box.getCount()).sum();
+        }
+        return count;
+    }
+    @Test void nonStackableOutputsFillSameBoxAcrossRoundsAndSplitOnlyWhenFull() {
+        var slots = inventory(); var boxes = box(); boxes.setCount(64);
+        boxes.set(DataComponents.CUSTOM_NAME, net.minecraft.network.chat.Component.literal("travel"));
+        slots.set(0, boxes);
+        var inventory = snapshot(new InventoryStore(slots));
+        var book = new ItemStack(Items.ENCHANTED_BOOK);
+        book.set(DataComponents.CUSTOM_NAME, net.minecraft.network.chat.Component.literal("mending"));
+        int preferred = -1, firstBox = -1;
+        for (int round = 1; round <= 3; round++) {
+            addSingles(inventory, book, 12);
+            var plan = new InventoryStore(inventory, preferred);
+            assertEquals(12, plan.storeAvailableInBoxes(book, plan.directCount(book)));
+            assertEquals(0, plan.directCount(book));
+            preferred = plan.preferredOutputSlot();
+            plan.commit(inventory);
+            if (round == 1) firstBox = preferred;
+            if (round <= 2) {
+                assertEquals(firstBox, preferred);
+                assertEquals(63, inventory.getItem(0).getCount());
+            } else {
+                assertNotEquals(firstBox, preferred);
+                assertEquals(62, inventory.getItem(0).getCount());
+                assertEquals(27, inventory.getItem(firstBox).get(DataComponents.CONTAINER).nonEmptyItemCopyStream().count());
+                assertEquals(9, inventory.getItem(preferred).get(DataComponents.CONTAINER).nonEmptyItemCopyStream().count());
+            }
+            assertEquals(round * 12, boxedCount(inventory, book));
+            int totalBoxes = 0;
+            for (int i = 0; i < 36; i++) if (InventoryStore.expandableBox(inventory.getItem(i))) {
+                totalBoxes += inventory.getItem(i).getCount();
+                assertEquals("travel", inventory.getItem(i).get(DataComponents.CUSTOM_NAME).getString());
+            }
+            assertEquals(64, totalBoxes);
+        }
+        assertEquals(64, boxes.getCount());
+    }
+    @Test void currentPartlyFilledBoxWinsOverAnotherEmptyBox() {
+        var slots = inventory();slots.set(0, box());slots.set(1, box(new ItemStack(Items.DIAMOND, 3)));
+        slots.set(2, new ItemStack(Items.DIAMOND, 12));
+        var inventory = snapshot(new InventoryStore(slots));
+        var plan = new InventoryStore(inventory, 1);
+        assertEquals(12, plan.storeAvailableInBoxes(new ItemStack(Items.DIAMOND), 12));
+        plan.commit(inventory);
+        assertEquals(0, inventory.getItem(0).get(DataComponents.CONTAINER).nonEmptyItemCopyStream().count());
+        assertEquals(15, inventory.getItem(1).get(DataComponents.CONTAINER).copyOne().getCount());
+    }
+    @Test void storingNoOutputsDoesNotSplitBoxes() {
+        var slots = inventory(); var boxes = box(); boxes.setCount(64); slots.set(0, boxes);
+        var plan = new InventoryStore(slots);
+        assertEquals(0, plan.storeAvailableInBoxes(new ItemStack(Items.DIAMOND), 0));
+        assertEquals(0, plan.storeAvailableInBoxes(new ItemStack(Items.DIAMOND), 12));
+        assertEquals(64, snapshot(plan).getItem(0).getCount());
+    }
+    @Test void insufficientSpaceForSplittingUsesExistingBoxAndLeavesOverflow() {
+        var slots = inventory();
+        for (int i = 0; i < 35; i++) slots.set(i, new ItemStack(Items.STONE, 64));
+        var stacked = box(); stacked.setCount(64); slots.set(0, stacked);
+        var contents = NonNullList.withSize(27, new ItemStack(Items.STONE, 64));
+        contents.set(0, new ItemStack(Items.DIAMOND, 62));
+        var partial = box(); partial.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(contents));
+        slots.set(1, partial);slots.set(2, new ItemStack(Items.DIAMOND, 8));
+        var plan = new InventoryStore(slots);
+        assertEquals(2, plan.storeAvailableInBoxes(new ItemStack(Items.DIAMOND), 8));
+        assertEquals(6, plan.directCount(new ItemStack(Items.DIAMOND)));
+        var result = snapshot(plan);
+        assertEquals(64, result.getItem(0).getCount());
+        assertEquals(64, result.getItem(1).get(DataComponents.CONTAINER).copyOne().getCount());
+    }
+    @Test void failedExactStorageDoesNotPartiallyMoveItemsInThePlan() {
+        var slots = inventory();slots.set(0, new ItemStack(Items.DIAMOND, 8));
+        var full = NonNullList.withSize(27, new ItemStack(Items.STONE, 64));full.set(0, new ItemStack(Items.DIAMOND, 62));
+        var box = box();box.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(full));slots.set(1, box);
+        var plan = new InventoryStore(slots);
+        assertFalse(plan.storeInBoxes(new ItemStack(Items.DIAMOND), 8));
+        assertEquals(8, plan.directCount(new ItemStack(Items.DIAMOND)));
+        assertEquals(62, snapshot(plan).getItem(1).get(DataComponents.CONTAINER).copyOne().getCount());
+    }
+    @Test void shulkerOutputsCannotBeNestedInsideOtherShulkers() {
+        var slots = inventory();slots.set(0, box());slots.set(1, box());
+        var plan = new InventoryStore(slots);
+        assertEquals(0, plan.storeAvailableInBoxes(new ItemStack(Items.SHULKER_BOX), 2));
+        assertEquals(2, plan.directCount(slots.get(0).copy()));
     }
     @Test void emptyBoxIsFilledBeforeAnEarlierMatchingBox() {
         var slots = inventory(); slots.set(0, box(new ItemStack(Items.DIAMOND, 60)));
@@ -92,9 +196,9 @@ class InventoryStoreTest {
     @BeforeAll static void bootstrap() {
         SharedConstants.tryDetectVersion(); Bootstrap.bootStrap();
         // Tests need only stack limits, while a running server binds full datapack defaults.
-        for (var item : java.util.List.of(Items.EMERALD, Items.BOOK, Items.DIAMOND, Items.STONE, Items.SHULKER_BOX))
+        for (var item : java.util.List.of(Items.EMERALD, Items.BOOK, Items.DIAMOND, Items.STONE, Items.SHULKER_BOX, Items.ENCHANTED_BOOK))
             item.builtInRegistryHolder().bindComponents(net.minecraft.core.component.DataComponentMap.builder()
-                    .set(DataComponents.MAX_STACK_SIZE, item == Items.SHULKER_BOX ? 1 : 64).build());
+                    .set(DataComponents.MAX_STACK_SIZE, item == Items.SHULKER_BOX || item == Items.ENCHANTED_BOOK ? 1 : 64).build());
     }
     private static NonNullList<ItemStack> inventory() { return NonNullList.withSize(36, ItemStack.EMPTY); }
     private static ItemStack box(ItemStack... contents) {

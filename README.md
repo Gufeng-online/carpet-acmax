@@ -9,7 +9,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 
 | 分支 | Minecraft | Fabric API | Carpet 依赖 | 模组版本 |
 | --- | --- | --- | --- | --- |
-| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.15 |
+| `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.9 |
 | `26.1.2` | 26.1.2 | 0.155.2+26.1.2 | 26.1 | v1.2 |
 
 两个分支均提供原有五项规则；假人虚空交易规则仅适用于 `main` 分支。
@@ -45,6 +45,14 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 #### 准备装置和假人
 
 需要可正常运行的虚空交易装置：假人打开村民交易后，经末地折跃门到达远端，使村民区块卸载；远端提供可交互的陷阱箱和返程机构。其他玩家或区块加载器不能让目标村民区块持续加载。
+
+为避免折跃门维持村民区块加载，需要在服务端开启 CCA 的以下规则（需已安装 CCA）：
+
+```mcfunction
+/cca GatewayCannotLoadingChunks true
+```
+
+未开启时，假人传送回主岛后可能在 `WAIT_GATEWAY` 状态等待约 **13 秒**，直到外岛村民所在区块真正卸载后才会进行交易。
 
 创建假人，将它放在村民附近，为它准备交易材料、潜影盒及背包空位：
 
@@ -98,7 +106,11 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 
 材料不足以完成目标时会提示，仍交易所有能够支付的部分。最后剩余材料只能支付较少交易时，也会继续成交；不足一笔报价的材料保留。每笔交易按该报价的完整数量成交，因此累计产物可能略超过 `count` 目标。
 
-产物优先放入空潜影盒；堆叠盒按需一次展开一个。潜影盒容量不足或没有可用盒子时，剩余产物保留在假人背包并继续。只有背包和潜影盒都无法接收下一笔产物时才因空间不足停止。
+选择新收纳盒时优先完全空的潜影盒；选中后在同一任务内跨轮持续填充同一个盒子，放不下剩余产物时再换盒。停止后重新启动任务会重新优先选择空盒。堆叠盒按需一次展开一个，填完当前盒子后才考虑下一盒，不会提前拆开用不到的盒子。
+
+展开堆叠盒至少需要两个普通背包空槽。空位不足时不拆盒，先尝试已有可用盒子；仍未存下的产物保留在背包。下一笔完整产物无法放入背包，且收纳也无法腾出足够空间时停止。请在交易前留足空位；如果产物已占满拆盒所需空位，即使仍有堆叠空盒也可能停止。
+
+收纳会处理背包中所有匹配当前产物组件的物品，包括上一轮未能存下的部分。达到轮数或产物数量目标后，也会完成收纳、等待剩余冷却并返程，再结束任务。
 
 查询或手动停止：
 
@@ -143,7 +155,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 ./gradlew build
 ```
 
-产物：`build/libs/carpet-acmax-addition-v1.5.15.jar`（放进服务端 `mods/` 即可，客户端无需安装）。
+产物：`build/libs/carpet-acmax-addition-v1.5.9.jar`（放进服务端 `mods/` 即可，客户端无需安装）。
 
 ## 运行依赖
 
@@ -154,7 +166,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 
 适用于假人虚空交易的依赖为 Carpet 26.2 和对应 Minecraft 26.2 的 Fabric API；不需要客户端前置。
 
-构建产物为 `carpet-acmax-addition-v1.5.15.jar`，放入服务器 `mods`。单人游戏放入本地 Fabric 实例的 `mods`。客户端无需安装本扩展，请勿同时安装独立 `fake_player_void_trading`。
+构建产物为 `carpet-acmax-addition-v1.5.9.jar`，放入服务器 `mods`。单人游戏放入本地 Fabric 实例的 `mods`。客户端无需安装本扩展，请勿同时安装独立 `fake_player_void_trading`。
 
 [旧版回滚](docs/ROLLBACK.zh.md) · [验证结果](VALIDATION.md)
 
