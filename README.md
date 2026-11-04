@@ -12,7 +12,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 | `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.9 |
 | `26.1.2` | 26.1.2 | 0.155.2+26.1.2 | 26.1 | v1.2 |
 
-两个分支均提供原有五项规则；假人虚空交易规则仅适用于 `main` 分支。
+两个分支均提供原有五项规则；假人虚空交易和 `voidSkylightFix` 规则仅适用于 `main` 分支。
 
 ## 规则列表
 
@@ -27,6 +27,15 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 | `cactusWrenchRailEnhancement` | `false` | 仙人掌扳手铁轨增强（需同时开启 `flippinCactus`）：手持仙人掌右键铁轨可依次切换所有形态，且不触发方块 / 邻居更新。 |
 | `trialSpawnerIntervalFix` | `false` | 修复试炼刷怪笼生成间隔：把试炼密室 `chamber_8`、`encounter_4` 结构中 160gt（8 秒）的生成间隔修正为正常的 20gt（1 秒）。 |
 | `fakePlayerVoidTrading` | `false` | 开启假人虚空交易；关闭后停止正在运行的交易任务。 |
+
+### 虚空天光修复用法
+
+`voidSkylightFix` 默认关闭。需要修复 `Y=-63` 刷怪空气层的天光时开启；使用 `setDefault` 可保存设置，重启后仍生效：
+
+```mcfunction
+/carpet voidSkylightFix true
+/carpet setDefault voidSkylightFix true
+```
 
 ### 虚空交易用法
 
@@ -166,7 +175,7 @@ ACMAX 服务器自用的 [Carpet](https://github.com/gnembon/fabric-carpet) 扩�
 
 适用于假人虚空交易的依赖为 Carpet 26.2 和对应 Minecraft 26.2 的 Fabric API；不需要客户端前置。
 
-构建产物为 `carpet-acmax-addition-v1.5.9.jar`，放入服务器 `mods`。单人游戏放入本地 Fabric 实例的 `mods`。客户端无需安装本扩展，请勿同时安装独立 `fake_player_void_trading`。
+下载 [v1.5.9 成品](https://github.com/Gufeng-online/carpet-acmax/releases/download/v1.5.9/carpet-acmax-addition-v1.5.9.jar)，放入服务器 `mods`。单人游戏放入本地 Fabric 实例的 `mods`。客户端无需安装本扩展，请勿同时安装独立 `fake_player_void_trading`。
 
 [旧版回滚](docs/ROLLBACK.zh.md) · [验证结果](VALIDATION.md)
 

@@ -13,7 +13,7 @@ A [Carpet](https://github.com/gnembon/fabric-carpet) extension written for the A
 | `main` | 26.2 | 0.158.0+26.2 | 26.2 | v1.5.9 |
 | `26.1.2` | 26.1.2 | 0.155.2+26.1.2 | 26.1 | v1.2 |
 
-Both branches provide the original five rules; the fake-player void-trading rule is available only on `main`.
+Both branches provide the original five rules; fake-player void trading and `voidSkylightFix` are available only on `main`.
 
 ## Rules
 
@@ -29,6 +29,15 @@ All rules live in the `ACMAX` category and can be changed with the `/carpet` com
 | `cactusWrenchRailEnhancement` | `false` | Cactus wrench rail enhancement (also requires `flippinCactus`): right-click rails with a cactus to cycle through every shape without triggering block or neighbour updates. |
 | `trialSpawnerIntervalFix` | `false` | Fixes the trial spawner interval: the 160gt (8 second) interval used by the `chamber_8` and `encounter_4` structures of trial chambers becomes the normal 20gt (1 second). |
 | `fakePlayerVoidTrading` | `false` | Enable fake-player trading; turning it off stops active tasks. |
+
+### Void skylight fix
+
+`voidSkylightFix` is disabled by default. Enable it to fix skylight at the `Y=-63` spawn-air layer. Use `setDefault` to keep the setting after a restart:
+
+```mcfunction
+/carpet voidSkylightFix true
+/carpet setDefault voidSkylightFix true
+```
 
 ### Void-trading usage
 
@@ -127,7 +136,7 @@ no client installation needed.
 
 Fake-player void trading requires Carpet 26.2 and Fabric API for Minecraft 26.2. No client-side dependencies are needed.
 
-Put `carpet-acmax-addition-v1.5.9.jar` in the server `mods` folder, or your local Fabric instance for single-player. Clients do not need this extension. Do not install standalone `fake_player_void_trading` alongside it.
+Download the [v1.5.9 JAR](https://github.com/Gufeng-online/carpet-acmax/releases/download/v1.5.9/carpet-acmax-addition-v1.5.9.jar) and put it in the server `mods` folder, or your local Fabric instance for single-player. Clients do not need this extension. Do not install standalone `fake_player_void_trading` alongside it.
 
 [Rollback](docs/ROLLBACK.zh.md) · [Validation](VALIDATION.md)
 

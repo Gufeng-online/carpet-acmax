@@ -1,4 +1,18 @@
-# Carpet-ACMAX v1.5.8
+# Carpet-ACMAX 验证与版本记录
+
+## v1.5.8 → v1.5.9：2026-11-05 Release 发布
+
+本地工程由 v1.5.8 快进同步至远端已有的 v1.5.9；远端功能版本保持 v1.5.9，本次发布资料修订为 v1.5.9-docs.1。沿用远端提交 `2dfb3526bccc28fa0e3ea4f3e13ad6fa43b97918` 的源码与成品，未修改 Java 源码、资源或构建配置。v1.5.9 新增默认关闭的 `voidSkylightFix`，针对 `Y=-63` 刷怪空气层的天空状态、天光查询和下发数据；保留 v1.5.8 跨轮复用潜影盒等假人交易行为。
+
+[GitHub CI #32](https://github.com/Gufeng-online/carpet-acmax/actions/runs/41328916317) 的 `./gradlew build` 已成功，本次直接使用该 CI 输出，不重复编译。CI 归档 SHA-256 为 `8a0a9b23e85555391029e3623c0a544345089bb1601a01628e01daca4f14d3a1`，与 GitHub artifact digest 相符；安装 JAR 的 Mod 版本为 v1.5.9，要求 Minecraft 26.2、Fabric Loader >=0.19.3、Java >=25，并已包含天光修复类及 Mixin 配置。源码 JAR 中全部 main/client Java 文件逐项匹配该构建提交。安装包 SHA-256 为 `a368b937783a35a07023aaa8baf508a1ad6e5bce72b715bd6612a425633733cf`；源码包 SHA-256 为 `e720f46422b20e981b885d7d305ce4048fb2d2bdffed956183bfb0fc6ff009f5`。本次未进行游戏内天光、刷怪或装置验证，不将 CI 构建通过视为实机验证。
+
+中英文 README 保留原章节与规则表，补齐天光开关、保存默认值和 v1.5.9 下载链接；详细交易说明更新安装文件名。Release 说明包含兼容性、安装、天光开关、假人交易命令、CCA 设置与附件用途。工作区文档版本 1.0.14 → 1.0.15，MODS.md 同步版本、功能及用法。v1.5.9 安装 JAR、源码 JAR、两份校验值、发布辅助资料和核验结果均为首次创建，旧版成品、发布与标签保留。
+
+修改前备份：`../carpet-acmax-backups/carpet-acmax-v1.5.8-before-v1.5.9-release-2026-11-05-8841e39f/`。`project-v1.5.8.zip` 保存本地源码、构建配置、说明与已有成品，295 个文件 SHA-256 核对通过；`workspace-docs/` 保存工作区文档，两个 Git bundle 保留本地及远端完整历史，`project-remote-v1.5.9-before-release-docs.zip` 保存发布资料修改前的远端文件，`remote-before-release.json` 保存更新前发布和标签状态。所有备份及清单为首次创建，核验摘要见同目录 `ARTIFACT_VERIFICATION.json`。
+
+发布标签 `v1.5.9` 指向原 CI 构建提交 `2dfb3526bccc28fa0e3ea4f3e13ad6fa43b97918`，发布资料使用后续普通提交维护。更新前远端 main 同样保存为带说明的标签 `backup/pre-v1.5.9-release-20261105-8841e39f`；作者、提交者和新标签署名使用已认证用户 CNTrident，原有历史和版本标签不移动。回滚方法见 [回滚说明](docs/ROLLBACK.zh.md)。
+
+## v1.5.8：历史功能与验证
 
 假人交易同步独立客户端 Auto Void Trading 3.1.16 的收纳行为：新目标优先空盒，跨轮持续使用已选盒子，装不下剩余产物才换盒；只有仍有待存物品时才按需展开一个堆叠盒。收纳扫描全部同组件产物，包括上一轮留在背包的部分。空盒或容量不足时保留背包并继续流程。保持盒子数量、物品数量和组件，禁止将潜影盒产物嵌套放入另一潜影盒。
 

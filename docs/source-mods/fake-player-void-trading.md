@@ -1,10 +1,10 @@
 # Fake Player Void Trading
 
-Minecraft **26.2 / Fabric / Java 25** 服务端模组，使用 **Carpet 假人**自动运行虚空交易装置。本文描述整合版 v1.5.8；收纳与返程行为已同步独立客户端 3.1.16。
+Minecraft **26.2 / Fabric / Java 25** 服务端模组，使用 **Carpet 假人**自动运行虚空交易装置。本文描述整合版 v1.5.9；收纳与返程行为沿用 v1.5.8，已同步独立客户端 3.1.16。
 
 ## 安装
 
-将 `releases/carpet-acmax-addition-v1.5.8.jar` 放入服务器 `mods` 文件夹，同时安装适用于 26.2 的 Fabric API 和 [Carpet 26.2](https://modrinth.com/mod/carpet/version/26.2)。客户端无需安装本模组，也不需要 Item Scroller、MaLiLib 或 Quick Shulker。单人游戏可装在本地 Fabric 实例中，逻辑仍运行于内置服务器。
+将 `releases/carpet-acmax-addition-v1.5.9.jar` 放入服务器 `mods` 文件夹，同时安装适用于 26.2 的 Fabric API 和 [Carpet 26.2](https://modrinth.com/mod/carpet/version/26.2)。客户端无需安装本模组，也不需要 Item Scroller、MaLiLib 或 Quick Shulker。单人游戏可装在本地 Fabric 实例中，逻辑仍运行于内置服务器。
 
 ## 规则与绑定
 

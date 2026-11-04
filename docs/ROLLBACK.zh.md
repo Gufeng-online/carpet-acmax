@@ -76,3 +76,25 @@ git commit -m "Restore code before v1.5.8"
 ```
 
 本地推送前备份包含未提交源码、构建配置、说明和已有成品：`../carpet-acmax-backups/carpet-acmax-v1.5.8-before-github-2026-10-31-3c59962d/project-v1.5.8.zip`；同目录的 `history-before-v1.5.8-push.bundle` 保留 Git 历史，`BACKUP.json` 记录 SHA-256。备份文件为首次创建。
+
+## v1.5.9 发布前的版本
+
+2026-11-05 发布前，远端 main 已为 v1.5.9，提交为 `2dfb3526bccc28fa0e3ea4f3e13ad6fa43b97918`。发布标签 `v1.5.9` 指向这一成功 CI 构建提交；更新前状态另存为 `backup/pre-v1.5.9-release-20261105-8841e39f`，后续发布说明和成品同步使用普通追加提交。原有 v1.5.8 发布及标签保留。
+
+另开目录检查发布资料更新前的文件：
+
+```sh
+git fetch origin --tags
+git worktree add ../carpet-acmax-before-v1.5.9-release backup/pre-v1.5.9-release-20261105-8841e39f
+```
+
+若要撤销后续发布资料提交，在确认没有未保存修改后，从备份标签恢复文件并创建普通提交：
+
+```sh
+git restore --source=backup/pre-v1.5.9-release-20261105-8841e39f --staged --worktree -- .
+git commit -m "Restore files before v1.5.9 release documentation"
+```
+
+该备份点仍包含 v1.5.9 功能；若要退回 v1.5.8 功能，使用已有 `v1.5.8` 标签或对应 Release 安装包。文件提交回滚不会自动删除或改变 GitHub Release。
+
+本地同步前备份为 `../carpet-acmax-backups/carpet-acmax-v1.5.8-before-v1.5.9-release-2026-11-05-8841e39f/`，保存本地 v1.5.8 完整项目、工作区文档、远端发布前文件、Git 历史与 SHA-256 核验资料，均为首次创建。
